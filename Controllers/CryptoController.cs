@@ -3,6 +3,7 @@ using Advantage.API.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Linq;
 using Newtonsoft.Json.Linq;
+using System.Collections.Generic;
 
 namespace Advantage.API.Controllers
 {
@@ -11,7 +12,6 @@ namespace Advantage.API.Controllers
     {
         private readonly ApiContext _ctx;
         private string response;
-        private string checkId = null;
         
         public CryptoController(ApiContext ctx)
         {
@@ -21,44 +21,34 @@ namespace Advantage.API.Controllers
         [HttpGet]
         public IActionResult Get()
         {
+            List<Crypto> cryptos = new List<Crypto>();
             response = CoinMarketCapAPI.cmcGet();
             dynamic jsonObj = JObject.Parse(response);
             try
                 {
-                Crypto cryptoTemp = new Crypto();
-//                checkId = jsonObj["data"]["" + id + ""].ToString();
-                checkId = jsonObj.SelectToken("$.data["+6+"].id").ToString();
-                string cryptoName = jsonObj.SelectToken("$.data[" +6+ "].name").ToString();
-                string cryptoSymbol = jsonObj.SelectToken("$.data[" +6+ "].symbol").ToString();
-                string cryptoPrice = Math.Round(Convert.ToDecimal(jsonObj.SelectToken("$.data[" +6+ "].quote.USD.price")),2).ToString();
-                string cryptoChange_24h = Math.Round(Convert.ToDecimal(jsonObj.SelectToken("$.data[" +6+ "].quote.USD.percent_change_24h")),2).ToString();
-                string cryptoChange_7d = Math.Round(Convert.ToDecimal(jsonObj.SelectToken("$.data[" +6+ "].quote.USD.percent_change_7d")),2).ToString();
-                Console.WriteLine(checkId);
-                Console.WriteLine(cryptoName);
-                Console.WriteLine(cryptoSymbol);
-                Console.WriteLine(cryptoPrice);
-                Console.WriteLine(cryptoChange_24h);
-                Console.WriteLine(cryptoChange_7d);
+                    for (int i = 0; i < 10; i++)
+                    {
+                    Crypto cryptoTemp = new Crypto();
+                    cryptoTemp = CoinMarketCapAPI.cmcJsonParse(jsonObj, i);
+                    cryptos.Add(cryptoTemp);
+                    }
+
+                    foreach(var crypto in cryptos)
+                    {
+                        // _ctx.Cryptos.Add(cryptoTemp);
+                        // _ctx.Cryptos.Add(crypto);                      
+                        _ctx.Cryptos.Update(crypto);
+                    }
+                    _ctx.SaveChanges();
                     
-                cryptoTemp.idCrypto = Convert.ToInt32(checkId);
-                cryptoTemp.Name = cryptoName;
-                cryptoTemp.Symbol = cryptoSymbol;
-                cryptoTemp.Price = cryptoPrice;
-                cryptoTemp.Change24h = cryptoChange_24h;
-                cryptoTemp.Change7d = cryptoChange_7d;
-
-                _ctx.Cryptos.Add(cryptoTemp);
-                _ctx.SaveChanges();
-
+               
                 }
                 catch (Exception e)
                 {
                     Console.WriteLine(e);
                 }
 
-
-            var data = _ctx.Cryptos.OrderBy(c => c.idCrypto);
-
+            var data = _ctx.Cryptos.OrderBy(c => c.Rank);
             return Ok(data);
         }
 

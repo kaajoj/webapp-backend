@@ -9,12 +9,13 @@ namespace Advantage.API.Models
     public class Crypto
     {
         [Key]
-        public int idCrypto { get; set; }
+        public int idCrypto { get; set; }   
+        public int Rank { get; set; }
 
         public string Name { get; set; }
 
         public string Symbol { get; set; }
-
+    
         public string Price { get; set; }
 
         public string Change24h { get; set; }

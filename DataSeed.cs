@@ -38,25 +38,28 @@ namespace Advantage.API
             return new List<Crypto>()
             {
                 new Crypto {
-                    idCrypto = 1,
+                    idCrypto = 8000,
                     Name = "Bitcoin",
                     Symbol = "BTC",
+                    Rank = 1001,
                     Price = "4000",
                     Change24h = "30",
                     Change7d = "4"
                 },
                 new Crypto {
-                    idCrypto = 2,
+                    idCrypto = 8001,
                     Name = "Ethereum",
                     Symbol = "ETH",
+                    Rank = 1002,
                     Price = "200",
                     Change24h = "5",
                     Change7d = "10"
                 },
                 new Crypto {
-                    idCrypto = 3,
+                    idCrypto = 8002,
                     Name = "Litecoin",
                     Symbol = "LTC",
+                    Rank = 1003,
                     Price = "40",
                     Change24h = "-2",
                     Change7d = "-10"
