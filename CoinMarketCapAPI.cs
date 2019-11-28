@@ -5,11 +5,14 @@ using System.Web;
 class CoinMarketCapAPI
 {
   private static string API_KEY = "f742b5ad-230c-4dfe-b1dc-7fbe4ec51be4";
-  internal static void cmcGet()
+  internal static string cmcGet()
   {
+    string response = "";
+
     try
     {
-    Console.WriteLine(makeAPICall());
+    response = makeAPICall();   
+    Console.WriteLine(response);
     Console.WriteLine("COINMARKETCAP API makeAPICall");
     }
     catch (WebException e)
@@ -17,6 +20,8 @@ class CoinMarketCapAPI
     Console.WriteLine(e.Message);
     Console.WriteLine("COINMARKETCAP API EXCEPTION");
     }
+
+    return response;
   }
 
   static string makeAPICall()
