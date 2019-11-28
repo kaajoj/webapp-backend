@@ -64,6 +64,7 @@ namespace Advantage.API
 
             seed.SeedData();
 
+
             app.UseMvc(routes => routes.MapRoute(
                 "default", "api/{controller}/{action}/{id?}"
             ));

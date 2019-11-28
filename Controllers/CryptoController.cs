@@ -17,6 +17,8 @@ namespace Advantage.API.Controllers
         [HttpGet]
         public IActionResult Get()
         {
+            CoinMarketCapAPI.cmcGet();
+            
             var data = _ctx.Cryptos.OrderBy(c => c.idCrypto);
 
             return Ok(data);
