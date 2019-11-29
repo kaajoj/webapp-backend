@@ -61,10 +61,35 @@ namespace Advantage.API.Controllers
         }
 
 
-        [HttpGet("GetCryptoWallet/{n}", Name="GetCryptoWallet")]
-        public IActionResult GetCryptoWallet(int n)
+        [HttpGet("GetCryptoWallet", Name="GetCryptoWallet")]
+        public IActionResult GetCryptoWallet()
         {
             var crypto = _ctx.Cryptos.Where(c => c.ownFlag == 1);
+            return Ok(crypto);
+        }
+
+        // GET: crypto/edit/5
+        // [HttpGet("GetCmcApi")]
+        [HttpGet("Edit/{id}/{flag}")]
+        public IActionResult Edit(int? id, int flag)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var crypto = _ctx.Cryptos.Where(c => c.Rank == id).FirstOrDefault();;
+
+            if (crypto == null)
+            {
+                return NotFound();
+            }
+
+            crypto.ownFlag = flag;
+            Console.WriteLine(crypto);
+            _ctx.Cryptos.Update(crypto);
+            _ctx.SaveChanges();
+
             return Ok(crypto);
         }
              
