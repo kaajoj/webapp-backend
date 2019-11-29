@@ -11,7 +11,6 @@ namespace Advantage.API.Models
         [Key]
         public int idCrypto { get; set; }   
         public int Rank { get; set; }
-
         public string Name { get; set; }
 
         public string Symbol { get; set; }
@@ -21,5 +20,7 @@ namespace Advantage.API.Models
         public string Change24h { get; set; }
 
         public string Change7d { get; set; }
+
+        public int ownFlag { get; set; }
     }
 }
