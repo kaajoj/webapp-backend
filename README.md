@@ -1,1 +1,1 @@
-Backend created using in .net core
+Backend created in .net core
