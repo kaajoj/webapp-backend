@@ -75,12 +75,11 @@ namespace Advantage.API.Controllers
         [HttpGet("GetCryptoWallet", Name="GetCryptoWallet")]
         public IActionResult GetCryptoWallet()
         {
-            var crypto = _ctx.Cryptos.Where(c => c.ownFlag == 1);
+            var crypto = _ctx.Cryptos.Where(c => c.ownFlag == 1).OrderBy(c => c.Rank);
             return Ok(crypto);
         }
 
         // GET: crypto/edit/1/own/5
-        // [HttpGet("GetCmcApi")]
         [HttpGet("Edit/{id}/own/{flag}")]
         public IActionResult Edit(int? id, int flag)
         {
@@ -105,7 +104,6 @@ namespace Advantage.API.Controllers
         }
 
         // GET: crypto/edit/1/quantity/5
-        // [HttpGet("GetCmcApi")]
         [HttpGet("Edit/{id}/quantity/{quantity}")]
         public IActionResult EditQuantity(int? id, string quantity)
         {
@@ -120,8 +118,8 @@ namespace Advantage.API.Controllers
             {
                 return NotFound();
             }
-
-            crypto.Quantity = quantity; // quantity
+            crypto.Quantity = quantity; 
+            crypto = WalletOperations.calculateSum(crypto) ;
             Console.WriteLine(crypto);
             _ctx.Cryptos.Update(crypto);
             _ctx.SaveChanges();

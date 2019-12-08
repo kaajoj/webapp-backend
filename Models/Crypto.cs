@@ -24,5 +24,7 @@ namespace Advantage.API.Models
         public int ownFlag { get; set; }
 
         public string Quantity { get; set; }
+
+        public string Sum { get; set; }
     }
 }
