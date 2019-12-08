@@ -8,7 +8,7 @@ class WalletOperations
 {
   Crypto crypto = new Crypto(); 
   public static Crypto calculateSum(Crypto crypto) {
-      crypto.Sum = ((Convert.ToDouble(crypto.Price) * Convert.ToDouble(crypto.Quantity))).ToString(); 
+      crypto.Sum = Math.Round((Convert.ToDouble(crypto.Price) * Convert.ToDouble(crypto.Quantity)),2).ToString(); 
       return crypto;
   }
 

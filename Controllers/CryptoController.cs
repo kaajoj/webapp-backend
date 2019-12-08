@@ -88,7 +88,7 @@ namespace Advantage.API.Controllers
                 return NotFound();
             }
 
-            var crypto = _ctx.Cryptos.Where(c => c.Rank == id).FirstOrDefault();;
+            var crypto = _ctx.Cryptos.Where(c => c.Rank == id).FirstOrDefault();
 
             if (crypto == null)
             {
@@ -96,12 +96,17 @@ namespace Advantage.API.Controllers
             }
 
             crypto.ownFlag = flag;
+            crypto.Quantity = "0";
+            crypto.AlertUp = "0";
+            crypto.AlertDown = "0";
+            crypto.Sum = "0";
             Console.WriteLine(crypto);
             _ctx.Cryptos.Update(crypto);
             _ctx.SaveChanges();
 
             return Ok(crypto);
         }
+
 
         // GET: crypto/edit/1/quantity/5
         [HttpGet("Edit/{id}/quantity/{quantity}")]
@@ -112,7 +117,7 @@ namespace Advantage.API.Controllers
                 return NotFound();
             }
 
-            var crypto = _ctx.Cryptos.Where(c => c.Rank == id).FirstOrDefault();;
+            var crypto = _ctx.Cryptos.Where(c => c.Rank == id).FirstOrDefault();
 
             if (crypto == null)
             {
@@ -126,7 +131,55 @@ namespace Advantage.API.Controllers
 
             return Ok(crypto);
         }
-             
+
+
+         // GET: crypto/edit/1/alertup/5
+        [HttpGet("Edit/{id}/alertup/{alertup}")]
+        public IActionResult setAlertUp(int? id, string alertup)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var crypto = _ctx.Cryptos.Where(c => c.Rank == id).FirstOrDefault();
+
+            if (crypto == null)
+            {
+                return NotFound();
+            }
+            crypto.AlertUp = alertup; 
+            Console.WriteLine(crypto);
+            _ctx.Cryptos.Update(crypto);
+            _ctx.SaveChanges();
+
+            return Ok(crypto);
+        }
+
+         // GET: crypto/edit/1/alertdown/5
+        [HttpGet("Edit/{id}/alertdown/{alertdown}")]
+        public IActionResult setAlertDown(int? id, string alertdown)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var crypto = _ctx.Cryptos.Where(c => c.Rank == id).FirstOrDefault();
+
+            if (crypto == null)
+            {
+                return NotFound();
+            }
+            crypto.AlertDown = alertdown; 
+            Console.WriteLine(crypto);
+            _ctx.Cryptos.Update(crypto);
+            _ctx.SaveChanges();
+
+            return Ok(crypto);
+        }
+
+
         [HttpPost]
         public IActionResult Post([FromBody] Crypto crypto)
         {

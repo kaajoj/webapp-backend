@@ -26,5 +26,8 @@ namespace Advantage.API.Models
         public string Quantity { get; set; }
 
         public string Sum { get; set; }
+
+        public string AlertUp { get; set; }
+        public string AlertDown { get; set; }       
     }
 }
