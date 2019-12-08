@@ -27,7 +27,7 @@ namespace Advantage.API.Controllers
         }
 
         // GET api/crypto/5
-        [HttpGet("{id}")]
+        [HttpGet("{id}", Name = "GetCrypto")]
         public IActionResult Get(int id)
         {
             var crypto = _ctx.Cryptos.Find(id);
@@ -127,24 +127,6 @@ namespace Advantage.API.Controllers
             return Ok(crypto);
         }
              
-                // [HttpGet("ByCustomer/{n}")]
-//         public IActionResult ByCustomer(int n)
-//         {
-//             var orders = _ctx.Orders.Include(o => o.Customer).ToList();
-
-//             var groupedResult = orders.GroupBy(o => o.Customer.Id)
-//                 .ToList()
-//                 .Select(grp => new{
-//                     Name = _ctx.Customers.Find(grp.Key).Name,
-//                     Total = grp.Sum(x => x.Total)
-//                 }).OrderByDescending(res => res.Total)
-//                 .Take(n)
-//                 .ToList();
-
-//             return Ok(groupedResult);    
-//         }
-
-
         [HttpPost]
         public IActionResult Post([FromBody] Crypto crypto)
         {
