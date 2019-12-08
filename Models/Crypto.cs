@@ -22,5 +22,7 @@ namespace Advantage.API.Models
         public string Change7d { get; set; }
 
         public int ownFlag { get; set; }
+
+        public string Quantity { get; set; }
     }
 }
