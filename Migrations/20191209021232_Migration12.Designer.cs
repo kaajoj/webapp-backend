@@ -9,8 +9,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Advantage.API.Migrations
 {
     [DbContext(typeof(ApiContext))]
-    [Migration("20191129103932_Migration7")]
-    partial class Migration7
+    [Migration("20191209021232_Migration12")]
+    partial class Migration12
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -25,6 +25,10 @@ namespace Advantage.API.Migrations
                     b.Property<int>("idCrypto")
                         .ValueGeneratedOnAdd();
 
+                    b.Property<string>("AlertDown");
+
+                    b.Property<string>("AlertUp");
+
                     b.Property<string>("Change24h");
 
                     b.Property<string>("Change7d");
@@ -33,7 +37,11 @@ namespace Advantage.API.Migrations
 
                     b.Property<string>("Price");
 
+                    b.Property<string>("Quantity");
+
                     b.Property<int>("Rank");
+
+                    b.Property<string>("Sum");
 
                     b.Property<string>("Symbol");
 
@@ -49,25 +57,31 @@ namespace Advantage.API.Migrations
                     b.Property<int>("idCrypto")
                         .ValueGeneratedOnAdd();
 
+                    b.Property<string>("AlertDown");
+
+                    b.Property<string>("AlertUp");
+
+                    b.Property<string>("Change24h");
+
+                    b.Property<string>("Change7d");
+
+                    b.Property<string>("Name");
+
                     b.Property<string>("Price");
+
+                    b.Property<string>("Quantity");
+
+                    b.Property<int>("Rank");
+
+                    b.Property<string>("Sum");
 
                     b.Property<string>("Symbol");
 
-                    b.Property<string>("alertDown");
-
-                    b.Property<string>("alertUp");
-
-                    b.Property<string>("changePrice");
-
-                    b.Property<string>("quantity");
-
-                    b.Property<string>("startPrice");
-
-                    b.Property<string>("sum");
+                    b.Property<int>("ownFlag");
 
                     b.HasKey("idCrypto");
 
-                    b.ToTable("Walletcontext");
+                    b.ToTable("Wallet");
                 });
 #pragma warning restore 612, 618
         }

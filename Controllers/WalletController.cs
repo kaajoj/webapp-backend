@@ -17,7 +17,7 @@ namespace Advantage.API.Controllers
         [HttpGet]
         public IActionResult Get()
         {
-            var data = _ctx.Wallet.OrderBy(c => c.idCrypto);
+            var data = _ctx.Wallet.OrderBy(c => c.Rank);
 
             return Ok(data);
         }
@@ -26,8 +26,8 @@ namespace Advantage.API.Controllers
         [HttpGet("{id}", Name = "GetWallet")]
         public IActionResult Get(int id)
         {
-            var customer = _ctx.Wallet.Find(id);
-            return Ok(customer);
+            var crypto = _ctx.Wallet.Find(id);
+            return Ok(crypto);
         }
 
         // api/wallet/

@@ -71,13 +71,14 @@ namespace Advantage.API.Controllers
             return Ok(data);
         }
 
+        // Old function
         // GET: /api/crypto/getcryptowallet
-        [HttpGet("GetCryptoWallet", Name="GetCryptoWallet")]
-        public IActionResult GetCryptoWallet()
-        {
-            var crypto = _ctx.Cryptos.Where(c => c.ownFlag == 1).OrderBy(c => c.Rank);
-            return Ok(crypto);
-        }
+        // [HttpGet("GetCryptoWallet", Name="GetCryptoWallet")]
+        // public IActionResult GetCryptoWallet()
+        // {
+        //     var crypto = _ctx.Cryptos.Where(c => c.ownFlag == 1).OrderBy(c => c.Rank);
+        //     return Ok(crypto);
+        // }
 
         // GET: crypto/edit/1/own/5
         [HttpGet("Edit/{id}/own/{flag}")]
