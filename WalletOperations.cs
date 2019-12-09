@@ -6,8 +6,8 @@ using Advantage.API.Models;
 
 class WalletOperations
 {
-  Crypto crypto = new Crypto(); 
-  public static Crypto calculateSum(Crypto crypto) {
+  Wallet crypto = new Wallet(); 
+  public static Wallet calculateSum(Wallet crypto) {
       crypto.Sum = Math.Round((Convert.ToDouble(crypto.Price) * Convert.ToDouble(crypto.Quantity)),2).ToString(); 
       return crypto;
   }

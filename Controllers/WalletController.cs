@@ -1,3 +1,4 @@
+using System;
 using Advantage.API.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Linq;
@@ -44,6 +45,102 @@ namespace Advantage.API.Controllers
 
             return CreatedAtRoute("GetWallet", new { id = wallet.idCrypto }, wallet);
         }
+
+        
+        // api/wallet/delete/3
+        [HttpDelete("delete/{id}")]
+        public IActionResult Delete(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var crypto = _ctx.Wallet.Where(c => c.Rank == id).FirstOrDefault();
+
+            if (crypto == null)
+            {
+                return NotFound();
+            }
+
+            _ctx.Wallet.Remove(crypto);
+            _ctx.SaveChanges();
+
+            return Ok(crypto);
+        }
+
+
+        // GET: wallet/edit/1/quantity/5
+        [HttpGet("Edit/{id}/quantity/{quantity}")]
+        public IActionResult EditQuantity(int? id, string quantity)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var crypto = _ctx.Wallet.Where(c => c.Rank == id).FirstOrDefault();
+
+            if (crypto == null)
+            {
+                return NotFound();
+            }
+            crypto.Quantity = quantity; 
+            crypto = WalletOperations.calculateSum(crypto) ;
+            Console.WriteLine(crypto);
+            _ctx.Wallet.Update(crypto);
+            _ctx.SaveChanges();
+
+            return Ok(crypto);
+        }
+
+
+         // GET: wallet/edit/1/alertup/5
+        [HttpGet("Edit/{id}/alertup/{alertup}")]
+        public IActionResult setAlertUp(int? id, string alertup)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var crypto = _ctx.Wallet.Where(c => c.Rank == id).FirstOrDefault();
+
+            if (crypto == null)
+            {
+                return NotFound();
+            }
+            crypto.AlertUp = alertup; 
+            Console.WriteLine(crypto);
+            _ctx.Wallet.Update(crypto);
+            _ctx.SaveChanges();
+
+            return Ok(crypto);
+        }
+
+         // GET: wallet/edit/1/alertdown/5
+        [HttpGet("Edit/{id}/alertdown/{alertdown}")]
+        public IActionResult setAlertDown(int? id, string alertdown)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var crypto = _ctx.Wallet.Where(c => c.Rank == id).FirstOrDefault();
+
+            if (crypto == null)
+            {
+                return NotFound();
+            }
+            crypto.AlertDown = alertdown; 
+            Console.WriteLine(crypto);
+            _ctx.Wallet.Update(crypto);
+            _ctx.SaveChanges();
+
+            return Ok(crypto);
+        }
+
     }
 }
 

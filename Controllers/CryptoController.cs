@@ -71,6 +71,22 @@ namespace Advantage.API.Controllers
             return Ok(data);
         }
 
+        // api/crypto/
+        [HttpPost]
+        public IActionResult Post([FromBody] Crypto crypto)
+        {
+            if (crypto == null)
+            {
+                return BadRequest();
+            }
+
+            _ctx.Cryptos.Add(crypto);
+            _ctx.SaveChanges();
+
+            return CreatedAtRoute("GetCrypto", new { id = crypto.idCrypto }, crypto);
+        }
+
+
         // Old function
         // GET: /api/crypto/getcryptowallet
         // [HttpGet("GetCryptoWallet", Name="GetCryptoWallet")]
@@ -80,6 +96,7 @@ namespace Advantage.API.Controllers
         //     return Ok(crypto);
         // }
 
+        // Old function
         // GET: crypto/edit/1/own/5
         [HttpGet("Edit/{id}/own/{flag}")]
         public IActionResult Edit(int? id, int flag)
@@ -108,91 +125,5 @@ namespace Advantage.API.Controllers
             return Ok(crypto);
         }
 
-
-        // GET: crypto/edit/1/quantity/5
-        [HttpGet("Edit/{id}/quantity/{quantity}")]
-        public IActionResult EditQuantity(int? id, string quantity)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var crypto = _ctx.Cryptos.Where(c => c.Rank == id).FirstOrDefault();
-
-            if (crypto == null)
-            {
-                return NotFound();
-            }
-            crypto.Quantity = quantity; 
-            crypto = WalletOperations.calculateSum(crypto) ;
-            Console.WriteLine(crypto);
-            _ctx.Cryptos.Update(crypto);
-            _ctx.SaveChanges();
-
-            return Ok(crypto);
-        }
-
-
-         // GET: crypto/edit/1/alertup/5
-        [HttpGet("Edit/{id}/alertup/{alertup}")]
-        public IActionResult setAlertUp(int? id, string alertup)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var crypto = _ctx.Cryptos.Where(c => c.Rank == id).FirstOrDefault();
-
-            if (crypto == null)
-            {
-                return NotFound();
-            }
-            crypto.AlertUp = alertup; 
-            Console.WriteLine(crypto);
-            _ctx.Cryptos.Update(crypto);
-            _ctx.SaveChanges();
-
-            return Ok(crypto);
-        }
-
-         // GET: crypto/edit/1/alertdown/5
-        [HttpGet("Edit/{id}/alertdown/{alertdown}")]
-        public IActionResult setAlertDown(int? id, string alertdown)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var crypto = _ctx.Cryptos.Where(c => c.Rank == id).FirstOrDefault();
-
-            if (crypto == null)
-            {
-                return NotFound();
-            }
-            crypto.AlertDown = alertdown; 
-            Console.WriteLine(crypto);
-            _ctx.Cryptos.Update(crypto);
-            _ctx.SaveChanges();
-
-            return Ok(crypto);
-        }
-
-        // api/crypto/
-        [HttpPost]
-        public IActionResult Post([FromBody] Crypto crypto)
-        {
-            if (crypto == null)
-            {
-                return BadRequest();
-            }
-
-            _ctx.Cryptos.Add(crypto);
-            _ctx.SaveChanges();
-
-            return CreatedAtRoute("GetCrypto", new { id = crypto.idCrypto }, crypto);
-        }
     }
 }
