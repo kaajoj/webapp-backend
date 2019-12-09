@@ -45,8 +45,7 @@ namespace Advantage.API
                     Price = "4000",
                     Change24h = "30",
                     Change7d = "4",
-                    ownFlag = 0,
-                    Quantity = "0"
+                    ownFlag = 0
                 },
                 new Crypto {
                     idCrypto = 8001,
@@ -56,8 +55,7 @@ namespace Advantage.API
                     Price = "200",
                     Change24h = "5",
                     Change7d = "10",
-                    ownFlag = 0,
-                    Quantity = "0"
+                    ownFlag = 0
                 },
                 new Crypto {
                     idCrypto = 8002,
@@ -67,8 +65,7 @@ namespace Advantage.API
                     Price = "40",
                     Change24h = "-2",
                     Change7d = "-10",
-                    ownFlag = 0,
-                    Quantity = "0"
+                    ownFlag = 0
                 }
 
             };

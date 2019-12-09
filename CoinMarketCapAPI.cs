@@ -73,7 +73,6 @@ class CoinMarketCapAPI
         cryptoTemp.Change24h = cryptoChange_24h;
         cryptoTemp.Change7d = cryptoChange_7d;
         cryptoTemp.ownFlag = 0;
-        cryptoTemp.Quantity = "0";
   
     return cryptoTemp;
   }

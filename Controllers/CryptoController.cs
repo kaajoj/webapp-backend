@@ -114,10 +114,7 @@ namespace Advantage.API.Controllers
             }
 
             crypto.ownFlag = flag;
-            crypto.Quantity = "0";
-            crypto.AlertUp = "0";
-            crypto.AlertDown = "0";
-            crypto.Sum = "0";
+            
             Console.WriteLine(crypto);
             _ctx.Cryptos.Update(crypto);
             _ctx.SaveChanges();

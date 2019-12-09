@@ -21,13 +21,6 @@ namespace Advantage.API.Models
 
         public string Change7d { get; set; }
 
-        public int ownFlag { get; set; }
-
-        public string Quantity { get; set; }
-
-        public string Sum { get; set; }
-
-        public string AlertUp { get; set; }
-        public string AlertDown { get; set; }       
+        public int ownFlag { get; set; }       
     }
 }
