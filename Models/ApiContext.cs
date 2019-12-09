@@ -8,6 +8,6 @@ namespace Advantage.API.Models
 
         public DbSet<Crypto> Cryptos { get; set; }
 
-        public DbSet<Wallet> Walletcontext { get; set; }
+        public DbSet<Wallet> Wallet { get; set; }
     }
 }

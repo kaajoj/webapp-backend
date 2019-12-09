@@ -17,7 +17,7 @@ namespace Advantage.API.Controllers
         [HttpGet]
         public IActionResult Get()
         {
-            var data = _ctx.Walletcontext.OrderBy(c => c.idCrypto);
+            var data = _ctx.Wallet.OrderBy(c => c.idCrypto);
 
             return Ok(data);
         }
@@ -26,10 +26,11 @@ namespace Advantage.API.Controllers
         [HttpGet("{id}", Name = "GetWallet")]
         public IActionResult Get(int id)
         {
-            var customer = _ctx.Walletcontext.Find(id);
+            var customer = _ctx.Wallet.Find(id);
             return Ok(customer);
         }
 
+        // api/wallet/
         [HttpPost]
         public IActionResult Post([FromBody] Wallet wallet)
         {
@@ -38,7 +39,7 @@ namespace Advantage.API.Controllers
                 return BadRequest();
             }
 
-            _ctx.Walletcontext.Add(wallet);
+            _ctx.Wallet.Add(wallet);
             _ctx.SaveChanges();
 
             return CreatedAtRoute("GetWallet", new { id = wallet.idCrypto }, wallet);
