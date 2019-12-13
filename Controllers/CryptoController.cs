@@ -55,6 +55,8 @@ namespace Advantage.API.Controllers
                         {
                             _ctx.Cryptos.Add(crypto);   
                         } else {
+                            var cryptoWallet = _ctx.Wallet.Where(c => c.Rank == crypto.Rank).FirstOrDefault();
+                            crypto.ownFlag = cryptoWallet.ownFlag;
                             _ctx.Cryptos.Update(crypto);
                         }                                           
                     }
