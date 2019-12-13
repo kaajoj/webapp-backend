@@ -1,16 +1,13 @@
 using System;
-using System.Collections.Generic;
 using System.Net;
 using System.Web;
 using Advantage.API.Models;
-using Newtonsoft.Json.Linq;
 
 class CoinMarketCapAPI
 {
   private static string API_KEY = "f742b5ad-230c-4dfe-b1dc-7fbe4ec51be4";
-  static List<Crypto> cryptos = new List<Crypto>();
 
-  internal static List<Crypto> cmcGet()
+  internal static string cmcGet()
   {
     string response = "";
 
@@ -19,14 +16,6 @@ class CoinMarketCapAPI
     response = makeAPICall();   
     Console.WriteLine(response);
     Console.WriteLine("COINMARKETCAP API makeAPICall");
-
-    dynamic jsonObj = JObject.Parse(response);
-        for (int i = 0; i < 8; i++)
-        {
-        Crypto cryptoTemp = new Crypto();
-        cryptoTemp = cmcJsonParse(jsonObj, i);
-        cryptos.Add(cryptoTemp);
-        }
     }
     catch (WebException e)
     {
@@ -34,7 +23,7 @@ class CoinMarketCapAPI
     Console.WriteLine("COINMARKETCAP API EXCEPTION");
     }
 
-    return cryptos;
+    return response;
   }
 
   static string makeAPICall()

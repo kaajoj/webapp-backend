@@ -3489,9 +3489,9 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\Repos\\WEB\\AIproject\\api\\Advantage.API.csproj",
-      "projectName": "Advantage.API",
-      "projectPath": "D:\\Repos\\WEB\\AIproject\\api\\Advantage.API.csproj",
+      "projectUniqueName": "D:\\Repos\\WEB\\AIproject\\api\\AppAPI.csproj",
+      "projectName": "AppAPI",
+      "projectPath": "D:\\Repos\\WEB\\AIproject\\api\\AppAPI.csproj",
       "packagesPath": "C:\\Users\\Karol\\.nuget\\packages\\",
       "outputPath": "D:\\Repos\\WEB\\AIproject\\api\\obj\\",
       "projectStyle": "PackageReference",

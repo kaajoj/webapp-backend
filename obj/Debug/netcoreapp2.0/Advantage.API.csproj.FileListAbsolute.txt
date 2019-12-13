@@ -1,5 +1,0 @@
-D:\Repos\core-angular\Advantage.API\obj\Debug\netcoreapp2.0\Advantage.API.csprojAssemblyReference.cache
-D:\Repos\core-angular\Advantage.API\obj\Debug\netcoreapp2.0\Advantage.API.csproj.CoreCompileInputs.cache
-D:\Repos\core-angular\Advantage.API\obj\Debug\netcoreapp2.0\Advantage.API.AssemblyInfoInputs.cache
-D:\Repos\core-angular\Advantage.API\obj\Debug\netcoreapp2.0\Advantage.API.AssemblyInfo.cs
-D:\Repos\core-angular\Advantage.API\obj\Debug\netcoreapp2.0\UserSecretsAssemblyInfo.cs
