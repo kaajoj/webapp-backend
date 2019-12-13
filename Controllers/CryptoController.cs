@@ -2,7 +2,6 @@ using System;
 using Advantage.API.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Linq;
-using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
 
 namespace Advantage.API.Controllers
@@ -11,8 +10,7 @@ namespace Advantage.API.Controllers
     public class CryptoController : Controller
     {
         private readonly ApiContext _ctx;
-        private string response;
-        
+ 
         public CryptoController(ApiContext ctx)
         {
             _ctx = ctx;
@@ -37,23 +35,15 @@ namespace Advantage.API.Controllers
         [HttpGet("GetCmcApi")]
         public IActionResult GetCmcApi()
         {
-            List<Crypto> cryptos = new List<Crypto>();
-            response = CoinMarketCapAPI.cmcGet();
-            dynamic jsonObj = JObject.Parse(response);
+            List<Crypto> responseCryptos = new List<Crypto>();
+            responseCryptos = CoinMarketCapAPI.cmcGet();
+
             try
                 {
-                    for (int i = 0; i < 10; i++)
-                    {
-                    Crypto cryptoTemp = new Crypto();
-                    cryptoTemp = CoinMarketCapAPI.cmcJsonParse(jsonObj, i);
-                    cryptos.Add(cryptoTemp);
-                    }
-
-                    foreach(var crypto in cryptos)
+                    foreach(var crypto in responseCryptos)
                     {
                         if (!_ctx.Cryptos.Any())
                         {
-                            // _ctx.Cryptos.Add(cryptoTemp);
                             _ctx.Cryptos.Add(crypto);   
                         } else {
                             _ctx.Cryptos.Update(crypto);
