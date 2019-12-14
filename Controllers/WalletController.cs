@@ -149,8 +149,8 @@ namespace App.API.Controllers
             List<Crypto> cryptoList = new List<Crypto>();
             List<Wallet> walletList = new List<Wallet>();
 
-            cryptoList = _ctx.Cryptos.ToList(); // price
-            walletList = _ctx.Wallet.ToList(); // price
+            cryptoList = _ctx.Cryptos.ToList();
+            walletList = _ctx.Wallet.ToList();
 
             if (walletList == null)
             {
@@ -162,6 +162,8 @@ namespace App.API.Controllers
                         var id = cryptoWallet.id;
                         Crypto crypto = cryptoList.Find(c => c.idCrypto == id);
                         cryptoWallet.Price = crypto.Price;
+                        cryptoWallet.Change24h = crypto.Change24h;
+                        cryptoWallet.Change7d = crypto.Change7d;
                         // Console.WriteLine(cryptoWallet.Price);
                         _ctx.Wallet.Update(cryptoWallet); 
                     }
