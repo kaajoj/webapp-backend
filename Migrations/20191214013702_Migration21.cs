@@ -2,7 +2,7 @@
 
 namespace App.API.Migrations
 {
-    public partial class Migration15 : Migration
+    public partial class Migration21 : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {

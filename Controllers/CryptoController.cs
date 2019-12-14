@@ -54,18 +54,16 @@ namespace App.API.Controllers
                         if (!_ctx.Cryptos.Any())
                         {
                             _ctx.Cryptos.Add(crypto);   
-                            _ctx.SaveChanges();
                         } else {
                             var cryptoWallet = _ctx.Wallet.Where(c => c.Rank == crypto.Rank).FirstOrDefault();
                             crypto.ownFlag = cryptoWallet.ownFlag;
-                            if(cryptoWallet == null) {
+                            if(cryptoWallet.Equals(null)) {
                                 crypto.ownFlag = 0;
                             }
-                            _ctx.Cryptos.Update(crypto);
-                            _ctx.SaveChanges();   
+                            _ctx.Cryptos.Update(crypto);  
                         }                                           
                     }
-                                    
+                     _ctx.SaveChanges();                
                
                 }
                 catch (Exception e)

@@ -17,7 +17,7 @@
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
     },
-    "Advantage.API": {
+    "App.API": {
       "commandName": "Project",
       "launchBrowser": true,
       "launchUrl": "api/values",

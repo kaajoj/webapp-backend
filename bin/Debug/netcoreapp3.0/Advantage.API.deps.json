@@ -22,7 +22,7 @@
   },
   "targets": {
     ".NETCoreApp,Version=v3.0": {
-      "Advantage.API/1.0.0": {
+      "App.API/1.0.0": {
         "dependencies": {
           "Microsoft.AspNetCore.App": "3.0.0-preview-19075-0444",
           "Microsoft.AspNetCore.Mvc.NewtonsoftJson": "3.0.0-preview-19075-0444",
@@ -297,10 +297,10 @@
           "WindowsBase": "4.0.0.0"
         },
         "runtime": {
-          "Advantage.API.dll": {}
+          "App.API.dll": {}
         },
         "compile": {
-          "Advantage.API.dll": {}
+          "App.API.dll": {}
         }
       },
       "Microsoft.AspNetCore.App/3.0.0-preview-19075-0444": {},
@@ -2482,7 +2482,7 @@
     }
   },
   "libraries": {
-    "Advantage.API/1.0.0": {
+    "App.API/1.0.0": {
       "type": "project",
       "serviceable": false,
       "sha512": ""

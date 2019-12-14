@@ -18,7 +18,7 @@ namespace App.API.Migrations
                 .HasAnnotation("ProductVersion", "3.0.0-preview3.19153.1")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
-            modelBuilder.Entity("Advantage.API.Models.Crypto", b =>
+            modelBuilder.Entity("App.API.Models.Crypto", b =>
                 {
                     b.Property<int>("idCrypto")
                         .ValueGeneratedOnAdd();
@@ -42,7 +42,7 @@ namespace App.API.Migrations
                     b.ToTable("Cryptos");
                 });
 
-            modelBuilder.Entity("Advantage.API.Models.Wallet", b =>
+            modelBuilder.Entity("App.API.Models.Wallet", b =>
                 {
                     b.Property<int>("id")
                         .ValueGeneratedOnAdd();

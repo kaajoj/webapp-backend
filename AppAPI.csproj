@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.0</TargetFramework>
-    <UserSecretsId>Advantage-API-Sercrets</UserSecretsId>
+    <UserSecretsId>App-API-Sercrets</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>

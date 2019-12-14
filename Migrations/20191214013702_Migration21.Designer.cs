@@ -9,8 +9,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace App.API.Migrations
 {
     [DbContext(typeof(ApiContext))]
-    [Migration("20191209021232_Migration12")]
-    partial class Migration12
+    [Migration("20191214013702_Migration21")]
+    partial class Migration21
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -20,14 +20,10 @@ namespace App.API.Migrations
                 .HasAnnotation("ProductVersion", "3.0.0-preview3.19153.1")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
-            modelBuilder.Entity("Advantage.API.Models.Crypto", b =>
+            modelBuilder.Entity("App.API.Models.Crypto", b =>
                 {
                     b.Property<int>("idCrypto")
                         .ValueGeneratedOnAdd();
-
-                    b.Property<string>("AlertDown");
-
-                    b.Property<string>("AlertUp");
 
                     b.Property<string>("Change24h");
 
@@ -37,11 +33,7 @@ namespace App.API.Migrations
 
                     b.Property<string>("Price");
 
-                    b.Property<string>("Quantity");
-
                     b.Property<int>("Rank");
-
-                    b.Property<string>("Sum");
 
                     b.Property<string>("Symbol");
 
@@ -52,9 +44,9 @@ namespace App.API.Migrations
                     b.ToTable("Cryptos");
                 });
 
-            modelBuilder.Entity("Advantage.API.Models.Wallet", b =>
+            modelBuilder.Entity("App.API.Models.Wallet", b =>
                 {
-                    b.Property<int>("idCrypto")
+                    b.Property<int>("id")
                         .ValueGeneratedOnAdd();
 
                     b.Property<string>("AlertDown");
@@ -66,6 +58,8 @@ namespace App.API.Migrations
                     b.Property<string>("Change7d");
 
                     b.Property<string>("Name");
+
+                    b.Property<string>("OldPrice");
 
                     b.Property<string>("Price");
 
@@ -79,7 +73,7 @@ namespace App.API.Migrations
 
                     b.Property<int>("ownFlag");
 
-                    b.HasKey("idCrypto");
+                    b.HasKey("id");
 
                     b.ToTable("Wallet");
                 });
