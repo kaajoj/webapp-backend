@@ -1,7 +1,7 @@
 using System;
 using System.Net;
 using System.Web;
-using Advantage.API.Models;
+using App.API.Models;
 
 class CoinMarketCapAPI
 {

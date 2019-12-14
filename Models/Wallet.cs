@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace Advantage.API.Models
+namespace App.API.Models
 {
     public class Wallet
     {

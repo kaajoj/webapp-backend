@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Advantage.API.Models;
+using App.API.Models;
 
 class WalletOperations
 {

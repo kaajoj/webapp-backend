@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace Advantage.API.Migrations
+namespace App.API.Migrations
 {
     public partial class Migration20 : Migration
     {

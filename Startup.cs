@@ -1,11 +1,11 @@
-using Advantage.API.Models;
+using App.API.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Advantage.API
+namespace App.API
 {
     public class Startup
     {

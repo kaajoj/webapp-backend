@@ -1,9 +1,10 @@
 using System;
-using Advantage.API.Models;
+using App.API.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Linq;
+using System.Collections.Generic;
 
-namespace Advantage.API.Controllers
+namespace App.API.Controllers
 {
     [Route("api/[controller]")]
     public class WalletController : Controller
@@ -140,6 +141,37 @@ namespace Advantage.API.Controllers
 
             return Ok(crypto);
         }
+
+        // GET: wallet/edit/prices
+        [HttpGet("Edit/prices")]
+        public IActionResult updatePrices()
+        {
+            List<Crypto> cryptoList = new List<Crypto>();
+            List<Wallet> walletList = new List<Wallet>();
+
+            cryptoList = _ctx.Cryptos.ToList(); // price
+            walletList = _ctx.Wallet.ToList(); // price
+
+            foreach(var cryptoWallet in walletList)
+                    {
+                        var id = cryptoWallet.id;
+                        var crypto = cryptoList.Find(c => c.idCrypto == id);
+                        // var newPrice = crypto
+                        Console.WriteLine(crypto);
+                    }
+
+            if (walletList == null)
+            {
+                return NotFound();
+            }
+            // crypto.AlertDown = alertdown; 
+            // Console.WriteLine(crypto);
+            // _ctx.Wallet.Update(crypto);
+            // _ctx.SaveChanges();
+
+            return Ok(walletList);
+        }
+        
 
     }
 }

@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore.Migrations;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
-namespace Advantage.API.Migrations
+namespace App.API.Migrations
 {
     public partial class Migration12 : Migration
     {

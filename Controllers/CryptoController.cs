@@ -1,11 +1,11 @@
 using System;
-using Advantage.API.Models;
+using App.API.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Linq;
 using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
 
-namespace Advantage.API.Controllers
+namespace App.API.Controllers
 {
     [Route("api/[controller]")]
     public class CryptoController : Controller
@@ -54,13 +54,18 @@ namespace Advantage.API.Controllers
                         if (!_ctx.Cryptos.Any())
                         {
                             _ctx.Cryptos.Add(crypto);   
+                            _ctx.SaveChanges();
                         } else {
                             var cryptoWallet = _ctx.Wallet.Where(c => c.Rank == crypto.Rank).FirstOrDefault();
                             crypto.ownFlag = cryptoWallet.ownFlag;
+                            if(cryptoWallet == null) {
+                                crypto.ownFlag = 0;
+                            }
                             _ctx.Cryptos.Update(crypto);
+                            _ctx.SaveChanges();   
                         }                                           
                     }
-                    _ctx.SaveChanges();                   
+                                    
                
                 }
                 catch (Exception e)
@@ -86,16 +91,6 @@ namespace Advantage.API.Controllers
 
             return CreatedAtRoute("GetCrypto", new { id = crypto.idCrypto }, crypto);
         }
-
-
-        // Old function
-        // GET: /api/crypto/getcryptowallet
-        // [HttpGet("GetCryptoWallet", Name="GetCryptoWallet")]
-        // public IActionResult GetCryptoWallet()
-        // {
-        //     var crypto = _ctx.Cryptos.Where(c => c.ownFlag == 1).OrderBy(c => c.Rank);
-        //     return Ok(crypto);
-        // }
 
         // Old function
         // GET: crypto/edit/1/own/5

@@ -1,9 +1,9 @@
 using System.Linq;
-using Advantage.API.Models;
+using App.API.Models;
 using System;
 using System.Collections.Generic;
 
-namespace Advantage.API
+namespace App.API
 {
     public class DataSeed
     {
