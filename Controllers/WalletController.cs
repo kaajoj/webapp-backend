@@ -152,22 +152,21 @@ namespace App.API.Controllers
             cryptoList = _ctx.Cryptos.ToList(); // price
             walletList = _ctx.Wallet.ToList(); // price
 
-            foreach(var cryptoWallet in walletList)
-                    {
-                        var id = cryptoWallet.id;
-                        var crypto = cryptoList.Find(c => c.idCrypto == id);
-                        // var newPrice = crypto
-                        Console.WriteLine(crypto);
-                    }
-
             if (walletList == null)
             {
                 return NotFound();
             }
-            // crypto.AlertDown = alertdown; 
-            // Console.WriteLine(crypto);
-            // _ctx.Wallet.Update(crypto);
-            // _ctx.SaveChanges();
+
+            foreach(var cryptoWallet in walletList)
+                    {
+                        var id = cryptoWallet.id;
+                        Crypto crypto = cryptoList.Find(c => c.idCrypto == id);
+                        cryptoWallet.Price = crypto.Price;
+                        // Console.WriteLine(cryptoWallet.Price);
+                        _ctx.Wallet.Update(cryptoWallet); 
+                    }
+             
+            _ctx.SaveChanges();
 
             return Ok(walletList);
         }
