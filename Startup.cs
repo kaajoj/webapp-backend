@@ -1,19 +1,45 @@
 using App.API.Models;
+using App.API.Controllers;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using System;
+using System.Timers;
+using System.Net;
+using System.Web;
 
 namespace App.API
 {
+    
     public class Startup
     {
         private string _connectionString = null;
+        private static Timer aTimer;
 
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
+
+            aTimer = new System.Timers.Timer();
+            aTimer.Interval = 1000*60*15;
+
+            aTimer.Elapsed += OnTimedEvent;
+            aTimer.AutoReset = true;
+            aTimer.Enabled = true;
+        }
+
+        private static void OnTimedEvent(Object source, System.Timers.ElapsedEventArgs e)
+        {
+            var URLUpdateApi = new UriBuilder("https://localhost:5001/api/crypto/getcmcapi");
+            var URLUpdateWallet = new UriBuilder("https://localhost:5001/api/wallet/edit/prices/");
+
+            var client = new WebClient();
+            client.DownloadString(URLUpdateApi.ToString());
+            client.DownloadString(URLUpdateWallet.ToString());
+            
+            Console.WriteLine("API refreshed at {0}", e.SignalTime);
         }
 
         public IConfiguration Configuration { get; }
