@@ -23,14 +23,14 @@ namespace App.API
       public static void getAlerts(Wallet crypto) {   
         
           if(Convert.ToDouble(crypto.Change)<-Convert.ToDouble(crypto.AlertDown)) {
-            string buyStr = "Price below your alert(-" + crypto.AlertDown + "%)  -  buy  " + crypto.Symbol + "";      
+            string buyStr = "Price is below your alert(-" + crypto.AlertDown + "%)  -  buy  " + crypto.Name+"("+crypto.Symbol+")" + "";  
             Emails emails = new Emails();
-            emails.prepareMessage(buyStr);
+            emails.prepareMessage(buyStr, crypto.Price, crypto.OldPrice, crypto.Change);
           }
           if(Convert.ToDouble(crypto.Change)>Convert.ToDouble(crypto.AlertUp)) {
-            string sellStr = "Price above your alert(" + crypto.AlertUp + "%)  -  sell  " + crypto.Symbol + "";
+            string sellStr = "Price is above your alert(" + crypto.AlertUp + "%)  -  sell  " + crypto.Name+"("+crypto.Symbol+")" + "";
             Emails emails = new Emails();
-            emails.prepareMessage(sellStr);
+            emails.prepareMessage(sellStr, crypto.Price, crypto.OldPrice, crypto.Change);
           }
 
     }

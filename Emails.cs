@@ -7,7 +7,7 @@ namespace App.API
 {
     public class Emails
     {
-        public void prepareMessage(String alertStr)
+        public void prepareMessage(String alertStr, String price, String oldPrice, String change)
         {
         MimeMessage message = new MimeMessage();
         MailboxAddress from = new MailboxAddress("CryptoWebApp", "karol.testm@gmail.com");
@@ -17,7 +17,10 @@ namespace App.API
         message.Subject = "Price alert notification";
 
         BodyBuilder bodyBuilder = new BodyBuilder();
-        bodyBuilder.HtmlBody = "<h1>Automatic alert</h1><p><h4>"+ alertStr +"</h4></p>";
+        bodyBuilder.HtmlBody = "<h1>Automatic alert</h1><p><font color='green'><h4>"+ alertStr +"</h4></font></p>"  + 
+           "<p>Current Price: " + "<b><font color='green'>"+price+"</font></b>" + "<br>" +
+           "Old Price: " + "<b><font color='green'>"+oldPrice+"</font></b>" + "<br>" +
+           "Price change: " + "<b><font color='green'>"+change+"%</font></b>" + "</p>";
         message.Body = bodyBuilder.ToMessageBody();
 
         connectionMessage(message);
