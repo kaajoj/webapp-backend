@@ -12,18 +12,17 @@ using System.Web;
 
 namespace App.API
 {
-    
     public class Startup
     {
         private string _connectionString = null;
         private static Timer aTimer;
-
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
 
             aTimer = new System.Timers.Timer();
-            aTimer.Interval = 1000*60*15;
+            // aTimer.Interval = 1000*60*15;
+            aTimer.Interval = 1000*15;
 
             aTimer.Elapsed += OnTimedEvent;
             aTimer.AutoReset = true;
@@ -40,6 +39,10 @@ namespace App.API
             client.DownloadString(URLUpdateWallet.ToString());
             
             Console.WriteLine("API refreshed at {0}", e.SignalTime);
+
+            Emails emails = new Emails();
+            emails.prepareMessage();
+            Console.WriteLine("Email sent");
         }
 
         public IConfiguration Configuration { get; }

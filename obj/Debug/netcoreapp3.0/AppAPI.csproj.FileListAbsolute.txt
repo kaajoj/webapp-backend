@@ -302,3 +302,8 @@ D:\Repos\WEB\AIproject\api\obj\Debug\netcoreapp3.0\AppAPI.RazorTargetAssemblyInf
 D:\Repos\WEB\AIproject\api\obj\Debug\netcoreapp3.0\AppAPI.csproj.CopyComplete
 D:\Repos\WEB\AIproject\api\obj\Debug\netcoreapp3.0\AppAPI.dll
 D:\Repos\WEB\AIproject\api\obj\Debug\netcoreapp3.0\AppAPI.pdb
+D:\Repos\WEB\AIproject\api\bin\Debug\netcoreapp3.0\MailKit.dll
+D:\Repos\WEB\AIproject\api\bin\Debug\netcoreapp3.0\MimeKit.dll
+D:\Repos\WEB\AIproject\api\bin\Debug\netcoreapp3.0\BouncyCastle.Crypto.dll
+D:\Repos\WEB\AIproject\api\bin\Debug\netcoreapp3.0\runtimes\unix\lib\netstandard1.3\System.Text.Encoding.CodePages.dll
+D:\Repos\WEB\AIproject\api\bin\Debug\netcoreapp3.0\runtimes\win\lib\netstandard1.3\System.Text.Encoding.CodePages.dll

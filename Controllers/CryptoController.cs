@@ -5,13 +5,11 @@ using System.Linq;
 using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
 
-
 namespace App.API.Controllers
 {
     [Route("api/[controller]")]
     public class CryptoController : Controller
     {
-
         private readonly ApiContext _ctx;
         private string response;
         public CryptoController(ApiContext ctx)
