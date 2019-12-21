@@ -164,7 +164,8 @@ namespace App.API.Controllers
                         cryptoWallet.Price = crypto.Price;
                         cryptoWallet.Change24h = crypto.Change24h;
                         cryptoWallet.Change7d = crypto.Change7d;
-                        // Console.WriteLine(cryptoWallet.Price);
+                        cryptoWallet.Change = WalletOperations.calculateAlerts(cryptoWallet) ;
+                        // Console.WriteLine(cryptoWallet.Change);
                         _ctx.Wallet.Update(cryptoWallet); 
                     }
              
@@ -172,7 +173,21 @@ namespace App.API.Controllers
 
             return Ok(walletList);
         }
-        
+
+        // GET: wallet/check/alerts
+        [HttpGet("check/alerts")]
+        public IActionResult checkAlerts()
+        {
+            List<Wallet> walletList = new List<Wallet>();
+            walletList = _ctx.Wallet.ToList();
+
+            foreach(var cryptoWallet in walletList)
+                    {
+                      WalletOperations.getAlerts(cryptoWallet) ; 
+                    }
+            
+            return Ok();
+        }
 
     }
 }

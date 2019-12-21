@@ -1,5 +1,4 @@
 using App.API.Models;
-using App.API.Controllers;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -8,7 +7,6 @@ using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Timers;
 using System.Net;
-using System.Web;
 
 namespace App.API
 {
@@ -16,20 +14,26 @@ namespace App.API
     {
         private string _connectionString = null;
         private static Timer aTimer;
+        private static Timer aTimer2;
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
 
             aTimer = new System.Timers.Timer();
-            // aTimer.Interval = 1000*60*15;
-            aTimer.Interval = 1000*15;
+            aTimer.Interval = 1000*60*20;
 
-            aTimer.Elapsed += OnTimedEvent;
+            aTimer.Elapsed += OnTimedEventAPI;
             aTimer.AutoReset = true;
             aTimer.Enabled = true;
+
+            aTimer2 = new System.Timers.Timer();
+            aTimer2.Interval = 1000*60*21;
+            aTimer2.Elapsed += OnTimedEventEmails;
+            aTimer2.AutoReset = true;
+            aTimer2.Enabled = true;
         }
 
-        private static void OnTimedEvent(Object source, System.Timers.ElapsedEventArgs e)
+        private static void OnTimedEventAPI(Object source, System.Timers.ElapsedEventArgs e)
         {
             var URLUpdateApi = new UriBuilder("https://localhost:5001/api/crypto/getcmcapi");
             var URLUpdateWallet = new UriBuilder("https://localhost:5001/api/wallet/edit/prices/");
@@ -39,10 +43,15 @@ namespace App.API
             client.DownloadString(URLUpdateWallet.ToString());
             
             Console.WriteLine("API refreshed at {0}", e.SignalTime);
+        }
 
-            Emails emails = new Emails();
-            emails.prepareMessage();
-            Console.WriteLine("Email sent");
+           private static void OnTimedEventEmails(Object source, System.Timers.ElapsedEventArgs e)
+        {
+            var URLCheckAlerts = new UriBuilder("https://localhost:5001/api/wallet/check/alerts/");
+            var client = new WebClient();
+            client.DownloadString(URLCheckAlerts.ToString());
+
+            Console.WriteLine("Email sent at {0}", e.SignalTime);
         }
 
         public IConfiguration Configuration { get; }

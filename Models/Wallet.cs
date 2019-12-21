@@ -25,5 +25,7 @@ namespace App.API.Models
 
         public string AlertUp { get; set; }
         public string AlertDown { get; set; }       
+        public string Change { get; set; }      
+        
     }
 }

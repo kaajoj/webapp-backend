@@ -1,24 +1,23 @@
 using System;
 using MailKit.Net.Smtp;
 using MimeKit;
+using System.Collections.Generic;
 
 namespace App.API
 {
     public class Emails
     {
-        public void prepareMessage()
+        public void prepareMessage(String alertStr)
         {
         MimeMessage message = new MimeMessage();
-        MailboxAddress from = new MailboxAddress("Admin", "karol.testm@gmail.com");
+        MailboxAddress from = new MailboxAddress("CryptoWebApp", "karol.testm@gmail.com");
         message.From.Add(from);
-        MailboxAddress to = new MailboxAddress("User", "kaajooj@gmail.com");
+        MailboxAddress to = new MailboxAddress("kaajooj@gmail.com", "kaajooj@gmail.com");
         message.To.Add(to);
-        message.Subject = "CryptoWebApp alert";
+        message.Subject = "Price alert notification";
 
         BodyBuilder bodyBuilder = new BodyBuilder();
-        bodyBuilder.HtmlBody = "<h1>CryptoWebApp - alert</h1><p>Price below alert(-10) - buy ETH</p>";
-        bodyBuilder.TextBody = "Test World!";
-        
+        bodyBuilder.HtmlBody = "<h1>Automatic alert</h1><p><h4>"+ alertStr +"</h4></p>";
         message.Body = bodyBuilder.ToMessageBody();
 
         connectionMessage(message);
