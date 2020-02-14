@@ -20,7 +20,8 @@ namespace App.API
         bodyBuilder.HtmlBody = "<h1>Automatic alert</h1><p><font color='green'><h4>"+ alertStr +"</h4></font></p>"  + 
            "<p>Current Price: " + "<b><font color='green'>"+price+"</font></b>" + "<br>" +
            "Old Price: " + "<b><font color='green'>"+oldPrice+"</font></b>" + "<br>" +
-           "Price change: " + "<b><font color='green'>"+change+"%</font></b>" + "</p>";
+           "Price change: " + "<b><font color='green'>"+change+"%</font></b>" + "</p>" +
+           "<p><a href='http://localhost:4200/wallet' style='color:green'>Open your wallet</a></p>";
         message.Body = bodyBuilder.ToMessageBody();
 
         connectionMessage(message);

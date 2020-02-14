@@ -7,6 +7,8 @@ using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Timers;
 using System.Net;
+using Microsoft.Extensions.Hosting;
+using Microsoft.AspNetCore.Mvc;
 
 namespace App.API
 {
@@ -20,14 +22,13 @@ namespace App.API
             Configuration = configuration;
 
             aTimer = new System.Timers.Timer();
-            aTimer.Interval = 1000*60*20;
-
+            aTimer.Interval = 1000*30*30;
             aTimer.Elapsed += OnTimedEventAPI;
             aTimer.AutoReset = true;
             aTimer.Enabled = true;
 
             aTimer2 = new System.Timers.Timer();
-            aTimer2.Interval = 1000*60*21;
+            aTimer2.Interval = (1000*30*30)+10000;
             aTimer2.Elapsed += OnTimedEventEmails;
             aTimer2.AutoReset = true;
             aTimer2.Enabled = true;
@@ -67,7 +68,7 @@ namespace App.API
             _connectionString = Configuration.GetConnectionString("connectionString");
 
 
-            services.AddMvc()
+            services.AddMvc(option => option.EnableEndpointRouting = false)
                 .AddNewtonsoftJson();
 
             services.AddEntityFrameworkNpgsql()
@@ -78,7 +79,7 @@ namespace App.API
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, DataSeed seed)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, DataSeed seed)
         {
             if (env.IsDevelopment())
             {
@@ -93,17 +94,14 @@ namespace App.API
 
             app.UseHttpsRedirection();
 
-            app.UseRouting(routes =>
-            {
-                routes.MapApplication();
-            });
+            app.UseRouting();
 
             app.UseAuthorization();
 
             // seed.SeedData();
 
             app.UseMvc(routes => routes.MapRoute(
-                "default", "api/{controller}/{action}/{id?}"
+                "default", "api/{controller}/{action}/{id?}"       
             ));
         }
     }

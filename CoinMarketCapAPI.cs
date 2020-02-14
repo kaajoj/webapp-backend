@@ -32,7 +32,7 @@ class CoinMarketCapAPI
 
     var queryString = HttpUtility.ParseQueryString(string.Empty);
     // queryString["start"] = "1";
-    queryString["limit"] = "8";
+    queryString["limit"] = "50";
     // queryString["convert"] = "USD,BTC";
     // queryString["convert"] = "BTC";
 
