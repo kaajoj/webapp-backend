@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "D:\\Repos\\WEB\\AIproject\\api\\AppAPI.csproj": {}
+    "D:\\Repos\\WEB\\AIproject\\VS\\VSapi\\AppAPI.csproj": {}
   },
   "projects": {
-    "D:\\Repos\\WEB\\AIproject\\api\\AppAPI.csproj": {
+    "D:\\Repos\\WEB\\AIproject\\VS\\VSapi\\AppAPI.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\Repos\\WEB\\AIproject\\api\\AppAPI.csproj",
+        "projectUniqueName": "D:\\Repos\\WEB\\AIproject\\VS\\VSapi\\AppAPI.csproj",
         "projectName": "AppAPI",
-        "projectPath": "D:\\Repos\\WEB\\AIproject\\api\\AppAPI.csproj",
+        "projectPath": "D:\\Repos\\WEB\\AIproject\\VS\\VSapi\\AppAPI.csproj",
         "packagesPath": "C:\\Users\\Karol\\.nuget\\packages\\",
-        "outputPath": "D:\\Repos\\WEB\\AIproject\\api\\obj\\",
+        "outputPath": "D:\\Repos\\WEB\\AIproject\\VS\\VSapi\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"

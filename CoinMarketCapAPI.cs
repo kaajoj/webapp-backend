@@ -3,11 +3,11 @@ using System.Net;
 using System.Web;
 using App.API.Models;
 
-class CoinMarketCapAPI
+public class CoinMarketCapAPI
 {
   private static string API_KEY = "f742b5ad-230c-4dfe-b1dc-7fbe4ec51be4";
 
-  internal static string cmcGet()
+  public string cmcGet()
   {
     string response = "";
 
@@ -15,7 +15,7 @@ class CoinMarketCapAPI
     {
     response = makeAPICall();   
     Console.WriteLine(response);
-    Console.WriteLine("COINMARKETCAP API makeAPICall");
+    Console.WriteLine("COINMARKETCAP API makeAPICall OK");
     }
     catch (WebException e)
     {
@@ -32,7 +32,7 @@ class CoinMarketCapAPI
 
     var queryString = HttpUtility.ParseQueryString(string.Empty);
     // queryString["start"] = "1";
-    queryString["limit"] = "50";
+    queryString["limit"] = "10";
     // queryString["convert"] = "USD,BTC";
     // queryString["convert"] = "BTC";
 
@@ -46,7 +46,7 @@ class CoinMarketCapAPI
 
   }
 
- internal static Crypto cmcJsonParse(dynamic jsonObj, int i)
+  public Crypto cmcJsonParse(dynamic jsonObj, int i)
   {  
         Crypto cryptoTemp = new Crypto();
         // checkId = jsonObj["data"]["" + id + ""].ToString();

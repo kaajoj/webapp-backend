@@ -37,14 +37,15 @@ namespace App.API.Controllers
         public IActionResult GetCmcApi()
         {
             List<Crypto> cryptos = new List<Crypto>();
-            response = CoinMarketCapAPI.cmcGet();
+            CoinMarketCapAPI coinMarketCapApi = new CoinMarketCapAPI();
+            response = coinMarketCapApi.cmcGet();
             dynamic jsonObj = JObject.Parse(response);
             try
                 {
-                    for (int i = 0; i < 50; i++)
+                    for (int i = 0; i < 10; i++)
                     {
                     Crypto cryptoTemp = new Crypto();
-                    cryptoTemp = CoinMarketCapAPI.cmcJsonParse(jsonObj, i);
+                    cryptoTemp = coinMarketCapApi.cmcJsonParse(jsonObj, i);
                     cryptos.Add(cryptoTemp);
                     }
 
