@@ -42,7 +42,7 @@ namespace App.API.Controllers
             dynamic jsonObj = JObject.Parse(response);
             try
                 {
-                    for (int i = 0; i < 10; i++)
+                    for (int i = 0; i < 15; i++)
                     {
                     Crypto cryptoTemp = new Crypto();
                     cryptoTemp = coinMarketCapApi.cmcJsonParse(jsonObj, i);
@@ -62,11 +62,12 @@ namespace App.API.Controllers
                             crypto.ownFlag = cryptoWallet.ownFlag;
                             _ctx.Cryptos.Update(crypto);
                             }
-                            catch (System.Exception e)
+                            catch (Exception e)
                             {
-                                Console.WriteLine(e);
-                            }                            
-                        }                                           
+                                // Console.WriteLine(e);
+                                Console.WriteLine("ownFlag == 0 " + crypto.Symbol);
+                            }
+                    }                                           
                     }
                      _ctx.SaveChanges();                
                

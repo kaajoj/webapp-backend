@@ -1,7 +1,6 @@
 using System;
 using MailKit.Net.Smtp;
 using MimeKit;
-using System.Collections.Generic;
 
 namespace App.API
 {
