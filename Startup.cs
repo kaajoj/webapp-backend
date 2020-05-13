@@ -1,16 +1,17 @@
-using App.API.Models;
+using System;
+using System.Net;
+using System.Timers;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Timers;
-using System.Net;
 using Microsoft.Extensions.Hosting;
-using Microsoft.AspNetCore.Mvc;
+using VSApi.Models;
 
-namespace App.API
+namespace VSApi
 {
     public class Startup
     {
@@ -21,14 +22,18 @@ namespace App.API
         {
             Configuration = configuration;
 
-            aTimer = new System.Timers.Timer();
-            aTimer.Interval = 1000*30*30;
+            aTimer = new Timer
+            {
+                Interval = 1000 * 30 * 30
+            };
             aTimer.Elapsed += OnTimedEventAPI;
             aTimer.AutoReset = true;
             aTimer.Enabled = true;
 
-            aTimer2 = new System.Timers.Timer();
-            aTimer2.Interval = (1000*30*30)+10000;
+            aTimer2 = new Timer
+            {
+                Interval = (1000 * 30 * 30) + 10000
+            };
             aTimer2.Elapsed += OnTimedEventEmails;
             aTimer2.AutoReset = true;
             aTimer2.Enabled = true;
@@ -65,17 +70,48 @@ namespace App.API
                 c => c.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
             });
 
-            _connectionString = Configuration.GetConnectionString("connectionString");
-
-
             services.AddMvc(option => option.EnableEndpointRouting = false)
                 .AddNewtonsoftJson();
 
-            services.AddEntityFrameworkNpgsql()
-            .AddDbContext<ApiContext>(
-                opt => opt.UseNpgsql(_connectionString));
+            _connectionString = Configuration.GetConnectionString("connectionString");
 
-            services.AddTransient<DataSeed>();
+            // Add EntityFramework support for SqlServer.
+            // services.AddEntityFrameworkSqlServer();
+
+            // Add ApplicationDbContext.
+            services.AddDbContext<ApiContext>(options =>
+                options.UseSqlServer(_connectionString)
+            );
+
+
+            // PostgreSQL
+            // services.AddEntityFrameworkNpgsql().AddDbContext<ApiContext>((sp, options) =>
+            // {
+            //     options.UseNpgsql(_connectionString);
+            //     options.UseInternalServiceProvider(sp);
+            //         
+            // });
+
+            // Add ASP.NET Core Identity support
+            services.AddDefaultIdentity<ApplicationUser>(options =>
+                {
+                    options.SignIn.RequireConfirmedAccount = true;
+                    options.Password.RequireLowercase = true;
+                    options.Password.RequireUppercase = true;
+                    options.Password.RequireDigit = true;
+                    options.Password.RequireNonAlphanumeric = true;
+                    options.Password.RequiredLength = 8;
+                })
+                .AddRoles<IdentityRole>()
+                .AddEntityFrameworkStores<ApiContext>();
+
+            services.AddIdentityServer()
+                .AddApiAuthorization<ApplicationUser, ApiContext>();
+
+            services.AddAuthentication()
+                .AddIdentityServerJwt();
+
+            // services.AddTransient<DataSeed>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -98,6 +134,8 @@ namespace App.API
 
             app.UseRouting();
 
+            app.UseAuthentication();
+            app.UseIdentityServer();
             app.UseAuthorization();
 
             // seed.SeedData();

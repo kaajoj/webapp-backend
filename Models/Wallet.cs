@@ -1,10 +1,9 @@
-using System.ComponentModel.DataAnnotations;
-
-namespace App.API.Models
+namespace VSApi.Models
 {
     public class Wallet
     {
-        public int id { get; set; }   
+        public int Id { get; set; }
+        public int IdCrypto { get; set; }
         public int Rank { get; set; }
         public string Name { get; set; }
 
@@ -17,7 +16,7 @@ namespace App.API.Models
 
         public string Change7d { get; set; }
 
-        public int ownFlag { get; set; }
+        public int OwnFlag { get; set; }
 
         public string Quantity { get; set; }
 

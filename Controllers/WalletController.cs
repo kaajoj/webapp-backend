@@ -1,10 +1,10 @@
 using System;
-using App.API.Models;
-using Microsoft.AspNetCore.Mvc;
-using System.Linq;
 using System.Collections.Generic;
+using System.Linq;
+using Microsoft.AspNetCore.Mvc;
+using VSApi.Models;
 
-namespace App.API.Controllers
+namespace VSApi.Controllers
 {
     [Route("api/[controller]")]
     public class WalletController : Controller
@@ -44,7 +44,7 @@ namespace App.API.Controllers
             _ctx.Wallet.Add(wallet);
             _ctx.SaveChanges();
 
-            return CreatedAtRoute("GetWallet", new { id = wallet.id }, wallet);
+            return CreatedAtRoute("GetWallet", new { id = wallet.Id }, wallet);
         }
 
         
@@ -159,8 +159,7 @@ namespace App.API.Controllers
 
             foreach(var cryptoWallet in walletList)
                     {
-                        var id = cryptoWallet.id;
-                        Crypto crypto = cryptoList.Find(c => c.idCrypto == id);
+                        Crypto crypto = cryptoList.Find(c => c.IdCrypto == cryptoWallet.IdCrypto);
                         cryptoWallet.Price = crypto.Price;
                         cryptoWallet.Change24h = crypto.Change24h;
                         cryptoWallet.Change7d = crypto.Change7d;

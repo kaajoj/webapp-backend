@@ -1,12 +1,17 @@
-using Microsoft.EntityFrameworkCore;
 using IdentityServer4.EntityFramework.Options;
 using Microsoft.AspNetCore.ApiAuthorization.IdentityServer;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 
-namespace App.API.Models
+namespace VSApi.Models
 {
-    public class ApiContext : DbContext
+    public class ApiContext : ApiAuthorizationDbContext<ApplicationUser>
     {
-        public ApiContext(DbContextOptions<ApiContext> options) : base(options) { 
+        public ApiContext(
+            DbContextOptions options,
+            IOptions<OperationalStoreOptions> operationalStoreOptions)
+            : base(options, operationalStoreOptions)
+        { 
         }
 
         public DbSet<Crypto> Cryptos { get; set; }

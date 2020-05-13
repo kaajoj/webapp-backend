@@ -1,17 +1,17 @@
 using System;
-using App.API.Models;
-using Microsoft.AspNetCore.Mvc;
-using System.Linq;
-using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
+using System.Linq;
+using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json.Linq;
+using VSApi.Models;
 
-namespace App.API.Controllers
+namespace VSApi.Controllers
 {
     [Route("api/[controller]")]
     public class CryptoController : Controller
     {
         private readonly ApiContext _ctx;
-        private string response;
+        private string _response;
         public CryptoController(ApiContext ctx)
         {
             _ctx = ctx;
@@ -38,8 +38,8 @@ namespace App.API.Controllers
         {
             List<Crypto> cryptos = new List<Crypto>();
             CoinMarketCapAPI coinMarketCapApi = new CoinMarketCapAPI();
-            response = coinMarketCapApi.cmcGet();
-            dynamic jsonObj = JObject.Parse(response);
+            _response = coinMarketCapApi.cmcGet();
+            dynamic jsonObj = JObject.Parse(_response);
             try
                 {
                     for (int i = 0; i < 15; i++)
@@ -54,12 +54,12 @@ namespace App.API.Controllers
                         if (!_ctx.Cryptos.Any())
                         {
                             _ctx.Cryptos.Add(crypto);   
-                        } else {
+                        } else if(_ctx.Cryptos.Equals(crypto.Rank)) {
                             _ctx.Cryptos.Update(crypto);  
                             try
                             {
                             var cryptoWallet = _ctx.Wallet.Where(c => c.Rank == crypto.Rank).FirstOrDefault();
-                            crypto.ownFlag = cryptoWallet.ownFlag;
+                            crypto.OwnFlag = cryptoWallet.OwnFlag;
                             _ctx.Cryptos.Update(crypto);
                             }
                             catch (Exception e)
@@ -93,7 +93,7 @@ namespace App.API.Controllers
             _ctx.Cryptos.Add(crypto);
             _ctx.SaveChanges();
 
-            return CreatedAtRoute("GetCrypto", new { id = crypto.idCrypto }, crypto);
+            return CreatedAtRoute("GetCrypto", new { id = crypto.IdCrypto }, crypto);
         }
 
         // Old function
@@ -113,7 +113,7 @@ namespace App.API.Controllers
                 return NotFound();
             }
 
-            crypto.ownFlag = flag;
+            crypto.OwnFlag = flag;
             
             Console.WriteLine(crypto);
             _ctx.Cryptos.Update(crypto);

@@ -2,7 +2,7 @@ using System;
 using MailKit.Net.Smtp;
 using MimeKit;
 
-namespace App.API
+namespace VSApi
 {
     public class Emails
     {
