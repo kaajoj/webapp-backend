@@ -10,7 +10,7 @@ using VSApi.Models;
 namespace VSApi.Migrations
 {
     [DbContext(typeof(ApiContext))]
-    [Migration("20200512232844_Identity")]
+    [Migration("20200515111732_Identity")]
     partial class Identity
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

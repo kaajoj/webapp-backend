@@ -41,41 +41,34 @@ namespace VSApi.Controllers
             _response = coinMarketCapApi.cmcGet();
             dynamic jsonObj = JObject.Parse(_response);
             try
+            {
+                for (int i = 0; i < 15; i++)
                 {
-                    for (int i = 0; i < 15; i++)
-                    {
                     Crypto cryptoTemp = new Crypto();
                     cryptoTemp = coinMarketCapApi.cmcJsonParse(jsonObj, i);
                     cryptos.Add(cryptoTemp);
-                    }
+                }
 
-                    foreach(var crypto in cryptos)
-                    {
-                        if (!_ctx.Cryptos.Any())
-                        {
-                            _ctx.Cryptos.Add(crypto);   
-                        } else if(_ctx.Cryptos.Equals(crypto.Rank)) {
-                            _ctx.Cryptos.Update(crypto);  
-                            try
-                            {
-                            var cryptoWallet = _ctx.Wallet.Where(c => c.Rank == crypto.Rank).FirstOrDefault();
-                            crypto.OwnFlag = cryptoWallet.OwnFlag;
-                            _ctx.Cryptos.Update(crypto);
-                            }
-                            catch (Exception e)
-                            {
-                                // Console.WriteLine(e);
-                                Console.WriteLine("ownFlag == 0 " + crypto.Symbol);
-                            }
-                    }                                           
-                    }
-                     _ctx.SaveChanges();                
-               
-                }
-                catch (Exception e)
+                foreach(var crypto in cryptos)
                 {
-                    Console.WriteLine(e);
+                    if (!_ctx.Cryptos.Any())
+                    {
+                        _ctx.Cryptos.Add(crypto);   
+                    } else {
+                        var cryptoToUpdate = _ctx.Cryptos.First(c => c.IdCrypto == crypto.IdCrypto);
+                        cryptoToUpdate.Price = crypto.Price;
+                        cryptoToUpdate.Change24h = crypto.Change24h;
+                        cryptoToUpdate.Change7d = crypto.Change7d;
+                        _ctx.Cryptos.Update(cryptoToUpdate);
+                    }                                           
                 }
+                _ctx.SaveChanges();                
+               
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+            }
 
             var data = _ctx.Cryptos.OrderBy(c => c.Rank);
             return Ok(data);

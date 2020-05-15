@@ -4,7 +4,6 @@ namespace VSApi.Models
 {
     public class Crypto
     {
-        [Key]
         public int Id { get; set; }
         public int IdCrypto { get; set; }
         public int Rank { get; set; }
