@@ -67,7 +67,9 @@ namespace VSApi
         {
             services.AddCors(opt => {
                 opt.AddPolicy("CorsPolicy",
-                c => c.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
+                c => c.AllowAnyOrigin()
+                    .AllowAnyHeader()
+                    .AllowAnyMethod());
             });
 
             services.AddMvc(option => option.EnableEndpointRouting = false)
@@ -140,9 +142,18 @@ namespace VSApi
 
             // seed.SeedData();
 
-            app.UseMvc(routes => routes.MapRoute(
-                "default", "api/{controller}/{action}/{id?}"       
-            ));
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapControllerRoute(
+                    name: "default",
+                    pattern: "{controller}/{action=Index}/{id?}");
+
+                endpoints.MapRazorPages();
+            });
+
+            // app.UseMvc(routes => routes.MapRoute(
+            //     "default", "api/{controller}/{action}/{id?}"       
+            // ));
         }
     }
 }
