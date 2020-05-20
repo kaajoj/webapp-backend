@@ -67,7 +67,8 @@ namespace VSApi
         {
             services.AddCors(opt => {
                 opt.AddPolicy("CorsPolicy",
-                c => c.AllowAnyOrigin()
+                c => c
+                    .AllowAnyOrigin()
                     .AllowAnyHeader()
                     .AllowAnyMethod());
             });
@@ -78,7 +79,7 @@ namespace VSApi
             _connectionString = Configuration.GetConnectionString("connectionString");
 
             // Add EntityFramework support for SqlServer.
-            // services.AddEntityFrameworkSqlServer();
+            services.AddEntityFrameworkSqlServer();
 
             // Add ApplicationDbContext.
             services.AddDbContext<ApiContext>(options =>
@@ -128,7 +129,6 @@ namespace VSApi
             }
             else
             {
-                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
 
@@ -151,9 +151,6 @@ namespace VSApi
                 endpoints.MapRazorPages();
             });
 
-            // app.UseMvc(routes => routes.MapRoute(
-            //     "default", "api/{controller}/{action}/{id?}"       
-            // ));
         }
     }
 }
