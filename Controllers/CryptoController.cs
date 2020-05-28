@@ -7,8 +7,9 @@ using VSApi.Models;
 
 namespace VSApi.Controllers
 {
+    [ApiController]
     [Route("api/[controller]")]
-    public class CryptoController : Controller
+    public class CryptoController : ControllerBase
     {
         private readonly ApiContext _ctx;
         private string _response;

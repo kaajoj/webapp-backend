@@ -16,13 +16,12 @@ namespace VSApi
     public class Startup
     {
         private string _connectionString = null;
-        private static Timer aTimer;
-        private static Timer aTimer2;
+
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
 
-            aTimer = new Timer
+            var aTimer = new Timer
             {
                 Interval = 1000 * 30 * 30
             };
@@ -30,7 +29,7 @@ namespace VSApi
             aTimer.AutoReset = true;
             aTimer.Enabled = true;
 
-            aTimer2 = new Timer
+            var aTimer2 = new Timer
             {
                 Interval = (1000 * 30 * 30) + 10000
             };
@@ -39,23 +38,23 @@ namespace VSApi
             aTimer2.Enabled = true;
         }
 
-        private static void OnTimedEventAPI(Object source, System.Timers.ElapsedEventArgs e)
+        private static void OnTimedEventAPI(Object source, ElapsedEventArgs e)
         {
-            var URLUpdateApi = new UriBuilder("https://localhost:5001/api/crypto/getcmcapi");
-            var URLUpdateWallet = new UriBuilder("https://localhost:5001/api/wallet/edit/prices/");
+            var urlUpdateApi = new UriBuilder("https://localhost:5001/api/crypto/getcmcapi");
+            var urlUpdateWallet = new UriBuilder("https://localhost:5001/api/wallet/edit/prices/");
 
             var client = new WebClient();
-            client.DownloadString(URLUpdateApi.ToString());
-            client.DownloadString(URLUpdateWallet.ToString());
+            client.DownloadString(urlUpdateApi.ToString());
+            client.DownloadString(urlUpdateWallet.ToString());
             
             Console.WriteLine("API refreshed at {0}", e.SignalTime);
         }
 
-           private static void OnTimedEventEmails(Object source, System.Timers.ElapsedEventArgs e)
+           private static void OnTimedEventEmails(Object source, ElapsedEventArgs e)
         {
-            var URLCheckAlerts = new UriBuilder("https://localhost:5001/api/wallet/check/alerts/");
+            var urlCheckAlerts = new UriBuilder("https://localhost:5001/api/wallet/check/alerts/");
             var client = new WebClient();
-            client.DownloadString(URLCheckAlerts.ToString());
+            client.DownloadString(urlCheckAlerts.ToString());
 
             Console.WriteLine("Email sent at {0}", e.SignalTime);
         }
@@ -65,10 +64,9 @@ namespace VSApi
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddCors(opt => {
-                opt.AddPolicy("CorsPolicy",
-                c => c
-                    .AllowAnyOrigin()
+            services.AddCors(options => {
+                options.AddPolicy(name: "CorsPolicy",
+                    builder  => builder.AllowAnyOrigin()
                     .AllowAnyHeader()
                     .AllowAnyMethod());
             });
@@ -78,22 +76,10 @@ namespace VSApi
 
             _connectionString = Configuration.GetConnectionString("connectionString");
 
-            // Add EntityFramework support for SqlServer.
-            services.AddEntityFrameworkSqlServer();
-
             // Add ApplicationDbContext.
             services.AddDbContext<ApiContext>(options =>
                 options.UseSqlServer(_connectionString)
             );
-
-
-            // PostgreSQL
-            // services.AddEntityFrameworkNpgsql().AddDbContext<ApiContext>((sp, options) =>
-            // {
-            //     options.UseNpgsql(_connectionString);
-            //     options.UseInternalServiceProvider(sp);
-            //         
-            // });
 
             // Add ASP.NET Core Identity support
             services.AddDefaultIdentity<ApplicationUser>(options =>
@@ -114,11 +100,12 @@ namespace VSApi
             services.AddAuthentication()
                 .AddIdentityServerJwt();
 
+            services.AddControllers();
+            services.AddRazorPages();
             // services.AddTransient<DataSeed>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         // public void Configure(IApplicationBuilder app, IWebHostEnvironment env, DataSeed seed)
         {
@@ -134,6 +121,8 @@ namespace VSApi
 
             app.UseHttpsRedirection();
 
+            app.UseStaticFiles();
+
             app.UseRouting();
 
             app.UseAuthentication();
@@ -147,7 +136,6 @@ namespace VSApi
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller}/{action=Index}/{id?}");
-
                 endpoints.MapRazorPages();
             });
 

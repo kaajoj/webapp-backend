@@ -1,13 +1,17 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using VSApi.Models;
 
 namespace VSApi.Controllers
 {
+    // [Authorize]
+    // [Authorize(Roles = "Administrator")]
+    [ApiController]
     [Route("api/[controller]")]
-    public class WalletController : Controller
+    public class WalletController : ControllerBase
     {
         private readonly ApiContext _ctx;
         
