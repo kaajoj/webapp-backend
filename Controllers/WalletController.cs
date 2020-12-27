@@ -4,6 +4,7 @@ using System.Linq;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using VSApi.Models;
+using VSApi.Services;
 
 namespace VSApi.Controllers
 {
@@ -91,7 +92,7 @@ namespace VSApi.Controllers
                 return NotFound();
             }
             crypto.Quantity = quantity; 
-            crypto = WalletOperations.calculateSum(crypto) ;
+            crypto = WalletOperations.CalculateSum(crypto) ;
             Console.WriteLine(crypto);
             _ctx.Wallet.Update(crypto);
             _ctx.SaveChanges();
@@ -167,7 +168,7 @@ namespace VSApi.Controllers
                         cryptoWallet.Price = crypto.Price;
                         cryptoWallet.Change24h = crypto.Change24h;
                         cryptoWallet.Change7d = crypto.Change7d;
-                        cryptoWallet.Change = WalletOperations.calculateAlerts(cryptoWallet) ;
+                        cryptoWallet.Change = WalletOperations.CalculateAlerts(cryptoWallet) ;
                         // Console.WriteLine(cryptoWallet.Change);
                         _ctx.Wallet.Update(cryptoWallet); 
                     }
@@ -186,7 +187,7 @@ namespace VSApi.Controllers
 
             foreach(var cryptoWallet in walletList)
                     {
-                      WalletOperations.getAlerts(cryptoWallet) ; 
+                      WalletOperations.GetAlerts(cryptoWallet) ; 
                     }
             
             return Ok();
