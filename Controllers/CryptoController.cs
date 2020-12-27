@@ -4,6 +4,7 @@ using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json.Linq;
 using VSApi.Models;
+using VSApi.Services;
 
 namespace VSApi.Controllers
 {
@@ -39,14 +40,14 @@ namespace VSApi.Controllers
         {
             List<Crypto> cryptos = new List<Crypto>();
             CoinMarketCapApi coinMarketCapApi = new CoinMarketCapApi();
-            _response = coinMarketCapApi.cmcGet();
+            _response = coinMarketCapApi.CmcGet();
             dynamic jsonObj = JObject.Parse(_response);
             try
             {
                 for (int i = 0; i < 15; i++)
                 {
                     Crypto cryptoTemp = new Crypto();
-                    cryptoTemp = coinMarketCapApi.cmcJsonParse(jsonObj, i);
+                    cryptoTemp = coinMarketCapApi.CmcJsonParse(jsonObj, i);
                     cryptos.Add(cryptoTemp);
                 }
 

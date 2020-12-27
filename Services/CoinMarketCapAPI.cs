@@ -3,19 +3,19 @@ using System.Net;
 using System.Web;
 using VSApi.Models;
 
-namespace VSApi
+namespace VSApi.Services
 {
     public class CoinMarketCapApi
     {
         private const string API_KEY = "f742b5ad-230c-4dfe-b1dc-7fbe4ec51be4";
 
-        public string cmcGet()
+        public string CmcGet()
         {
-            string response = "";
+            var response = "";
 
             try
             {
-                response = makeAPICall();   
+                response = MakeAPICall();
                 Console.WriteLine(response);
                 Console.WriteLine("COINMARKETCAP API makeAPICall OK");
             }
@@ -28,7 +28,7 @@ namespace VSApi
             return response;
         }
 
-        static string makeAPICall()
+        static string MakeAPICall()
         {
             var URL = new UriBuilder("https://pro-api.coinmarketcap.com/v1/cryptocurrency/listings/latest");
 
@@ -48,17 +48,17 @@ namespace VSApi
 
         }
 
-        public Crypto cmcJsonParse(dynamic jsonObj, int i)
-        {  
+        public Crypto CmcJsonParse(dynamic jsonObj, int i)
+        {
             Crypto cryptoTemp = new Crypto();
             // checkId = jsonObj["data"]["" + id + ""].ToString();
-            string cryptoId = jsonObj.SelectToken("$.data["+i+"].id").ToString();
-            string cryptoName = jsonObj.SelectToken("$.data[" +i+ "].name").ToString();
-            string cryptoSymbol = jsonObj.SelectToken("$.data[" +i+ "].symbol").ToString();
-            string cryptoRank = jsonObj.SelectToken("$.data[" +i+ "].cmc_rank").ToString();
-            string cryptoPrice = Math.Round(Convert.ToDecimal(jsonObj.SelectToken("$.data[" +i+ "].quote.USD.price")),2).ToString();
-            string cryptoChange_24h = Math.Round(Convert.ToDecimal(jsonObj.SelectToken("$.data[" +i+ "].quote.USD.percent_change_24h")),2).ToString();
-            string cryptoChange_7d = Math.Round(Convert.ToDecimal(jsonObj.SelectToken("$.data[" +i+ "].quote.USD.percent_change_7d")),2).ToString();
+            string cryptoId = jsonObj.SelectToken("$.data[" + i + "].id").ToString();
+            string cryptoName = jsonObj.SelectToken("$.data[" + i + "].name").ToString();
+            string cryptoSymbol = jsonObj.SelectToken("$.data[" + i + "].symbol").ToString();
+            string cryptoRank = jsonObj.SelectToken("$.data[" + i + "].cmc_rank").ToString();
+            string cryptoPrice = Math.Round(Convert.ToDecimal(jsonObj.SelectToken("$.data[" + i + "].quote.USD.price")), 2).ToString();
+            string cryptoChange_24h = Math.Round(Convert.ToDecimal(jsonObj.SelectToken("$.data[" + i + "].quote.USD.percent_change_24h")), 2).ToString();
+            string cryptoChange_7d = Math.Round(Convert.ToDecimal(jsonObj.SelectToken("$.data[" + i + "].quote.USD.percent_change_7d")), 2).ToString();
             Console.WriteLine(cryptoId);
             Console.WriteLine(cryptoName);
             Console.WriteLine(cryptoSymbol);
@@ -66,7 +66,7 @@ namespace VSApi
             Console.WriteLine(cryptoPrice);
             Console.WriteLine(cryptoChange_24h);
             Console.WriteLine(cryptoChange_7d);
-                    
+
             cryptoTemp.IdCrypto = Convert.ToInt16(cryptoId);
             cryptoTemp.Name = cryptoName;
             cryptoTemp.Symbol = cryptoSymbol;
@@ -75,10 +75,9 @@ namespace VSApi
             cryptoTemp.Change24h = cryptoChange_24h;
             cryptoTemp.Change7d = cryptoChange_7d;
             cryptoTemp.OwnFlag = 0;
-  
+
             return cryptoTemp;
         }
-
 
     }
 }
