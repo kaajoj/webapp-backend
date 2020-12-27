@@ -38,7 +38,7 @@ namespace VSApi.Controllers
         public IActionResult GetCmcApi()
         {
             List<Crypto> cryptos = new List<Crypto>();
-            CoinMarketCapAPI coinMarketCapApi = new CoinMarketCapAPI();
+            CoinMarketCapApi coinMarketCapApi = new CoinMarketCapApi();
             _response = coinMarketCapApi.cmcGet();
             dynamic jsonObj = JObject.Parse(_response);
             try

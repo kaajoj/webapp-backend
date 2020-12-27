@@ -5,7 +5,7 @@ using VSApi.Models;
 
 namespace VSApi
 {
-    public class CoinMarketCapAPI
+    public class CoinMarketCapApi
     {
         private static string API_KEY = "f742b5ad-230c-4dfe-b1dc-7fbe4ec51be4";
 
