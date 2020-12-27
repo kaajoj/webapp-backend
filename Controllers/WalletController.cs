@@ -103,7 +103,7 @@ namespace VSApi.Controllers
 
          // GET: wallet/edit/1/alertup/5
         [HttpGet("Edit/{id}/alertup/{alertup}")]
-        public IActionResult setAlertUp(int? id, string alertup)
+        public IActionResult SetAlertUp(int? id, string alertup)
         {
             if (id == null)
             {
@@ -126,7 +126,7 @@ namespace VSApi.Controllers
 
          // GET: wallet/edit/1/alertdown/5
         [HttpGet("Edit/{id}/alertdown/{alertdown}")]
-        public IActionResult setAlertDown(int? id, string alertdown)
+        public IActionResult SetAlertDown(int? id, string alertdown)
         {
             if (id == null)
             {
@@ -149,7 +149,7 @@ namespace VSApi.Controllers
 
         // GET: wallet/edit/prices
         [HttpGet("Edit/prices")]
-        public IActionResult updatePrices()
+        public IActionResult UpdatePrices()
         {
             List<Crypto> cryptoList = new List<Crypto>();
             List<Wallet> walletList = new List<Wallet>();
@@ -180,7 +180,7 @@ namespace VSApi.Controllers
 
         // GET: wallet/check/alerts
         [HttpGet("check/alerts")]
-        public IActionResult checkAlerts()
+        public IActionResult CheckAlerts()
         {
             List<Wallet> walletList = new List<Wallet>();
             walletList = _ctx.Wallet.ToList();
