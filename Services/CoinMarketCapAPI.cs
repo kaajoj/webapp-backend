@@ -7,7 +7,7 @@ namespace VSApi
 {
     public class CoinMarketCapApi
     {
-        private static string API_KEY = "f742b5ad-230c-4dfe-b1dc-7fbe4ec51be4";
+        private const string API_KEY = "f742b5ad-230c-4dfe-b1dc-7fbe4ec51be4";
 
         public string cmcGet()
         {
