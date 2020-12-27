@@ -1,9 +1,12 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json.Linq;
 using VSApi.Models;
+using VSApi.Services;
 
 namespace VSApi.Controllers
 {
@@ -35,18 +38,17 @@ namespace VSApi.Controllers
         }
 
         [HttpGet("GetCmcApi")]
-        public IActionResult GetCmcApi()
+        public async Task<IActionResult> GetCmcApi()
         {
-            List<Crypto> cryptos = new List<Crypto>();
-            CoinMarketCapAPI coinMarketCapApi = new CoinMarketCapAPI();
-            _response = coinMarketCapApi.cmcGet();
+            var cryptos = new List<Crypto>();
+            CoinMarketCapApi coinMarketCapApi = new CoinMarketCapApi();
+            _response = coinMarketCapApi.CmcGet();
             dynamic jsonObj = JObject.Parse(_response);
             try
             {
-                for (int i = 0; i < 15; i++)
+                for (var i = 0; i < 15; i++)
                 {
-                    Crypto cryptoTemp = new Crypto();
-                    cryptoTemp = coinMarketCapApi.cmcJsonParse(jsonObj, i);
+                    var cryptoTemp = coinMarketCapApi.CmcJsonParse(jsonObj, i);
                     cryptos.Add(cryptoTemp);
                 }
 
@@ -54,16 +56,18 @@ namespace VSApi.Controllers
                 {
                     if (!_ctx.Cryptos.Any())
                     {
-                        _ctx.Cryptos.Add(crypto);   
-                    } else {
+                        await _ctx.Cryptos.AddAsync(crypto);
+                        _ = await _ctx.SaveChangesAsync();
+                    }
+                    else {
                         var cryptoToUpdate = _ctx.Cryptos.First(c => c.IdCrypto == crypto.IdCrypto);
                         cryptoToUpdate.Price = crypto.Price;
                         cryptoToUpdate.Change24h = crypto.Change24h;
                         cryptoToUpdate.Change7d = crypto.Change7d;
                         _ctx.Cryptos.Update(cryptoToUpdate);
+                        _ = await _ctx.SaveChangesAsync();
                     }                                           
                 }
-                _ctx.SaveChanges();                
                
             }
             catch (Exception e)
@@ -100,7 +104,7 @@ namespace VSApi.Controllers
                 return NotFound();
             }
 
-            var crypto = _ctx.Cryptos.Where(c => c.Rank == id).FirstOrDefault();
+            var crypto = _ctx.Cryptos.FirstOrDefault(c => c.Rank == id);
 
             if (crypto == null)
             {

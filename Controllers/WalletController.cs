@@ -4,6 +4,7 @@ using System.Linq;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using VSApi.Models;
+using VSApi.Services;
 
 namespace VSApi.Controllers
 {
@@ -14,7 +15,7 @@ namespace VSApi.Controllers
     public class WalletController : ControllerBase
     {
         private readonly ApiContext _ctx;
-        
+
         public WalletController(ApiContext ctx)
         {
             _ctx = ctx;
@@ -24,7 +25,6 @@ namespace VSApi.Controllers
         public IActionResult Get()
         {
             var data = _ctx.Wallet.OrderBy(c => c.Rank);
-
             return Ok(data);
         }
 
@@ -51,7 +51,7 @@ namespace VSApi.Controllers
             return CreatedAtRoute("GetWallet", new { id = wallet.Id }, wallet);
         }
 
-        
+
         // api/wallet/delete/3
         [HttpDelete("delete/{id}")]
         public IActionResult Delete(int? id)
@@ -61,7 +61,7 @@ namespace VSApi.Controllers
                 return NotFound();
             }
 
-            var crypto = _ctx.Wallet.Where(c => c.Rank == id).FirstOrDefault();
+            var crypto = _ctx.Wallet.FirstOrDefault(c => c.Rank == id);
 
             if (crypto == null)
             {
@@ -84,14 +84,14 @@ namespace VSApi.Controllers
                 return NotFound();
             }
 
-            var crypto = _ctx.Wallet.Where(c => c.Rank == id).FirstOrDefault();
+            var crypto = _ctx.Wallet.FirstOrDefault(c => c.Rank == id);
 
             if (crypto == null)
             {
                 return NotFound();
             }
-            crypto.Quantity = quantity; 
-            crypto = WalletOperations.calculateSum(crypto) ;
+            crypto.Quantity = quantity;
+            crypto = WalletOperations.CalculateSum(crypto);
             Console.WriteLine(crypto);
             _ctx.Wallet.Update(crypto);
             _ctx.SaveChanges();
@@ -100,22 +100,22 @@ namespace VSApi.Controllers
         }
 
 
-         // GET: wallet/edit/1/alertup/5
+        // GET: wallet/edit/1/alertup/5
         [HttpGet("Edit/{id}/alertup/{alertup}")]
-        public IActionResult setAlertUp(int? id, string alertup)
+        public IActionResult SetAlertUp(int? id, string alertup)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var crypto = _ctx.Wallet.Where(c => c.Rank == id).FirstOrDefault();
+            var crypto = _ctx.Wallet.FirstOrDefault(c => c.Rank == id);
 
             if (crypto == null)
             {
                 return NotFound();
             }
-            crypto.AlertUp = alertup; 
+            crypto.AlertUp = alertup;
             Console.WriteLine(crypto);
             _ctx.Wallet.Update(crypto);
             _ctx.SaveChanges();
@@ -123,22 +123,22 @@ namespace VSApi.Controllers
             return Ok(crypto);
         }
 
-         // GET: wallet/edit/1/alertdown/5
+        // GET: wallet/edit/1/alertdown/5
         [HttpGet("Edit/{id}/alertdown/{alertdown}")]
-        public IActionResult setAlertDown(int? id, string alertdown)
+        public IActionResult SetAlertDown(int? id, string alertdown)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var crypto = _ctx.Wallet.Where(c => c.Rank == id).FirstOrDefault();
+            var crypto = _ctx.Wallet.FirstOrDefault(c => c.Rank == id);
 
             if (crypto == null)
             {
                 return NotFound();
             }
-            crypto.AlertDown = alertdown; 
+            crypto.AlertDown = alertdown;
             Console.WriteLine(crypto);
             _ctx.Wallet.Update(crypto);
             _ctx.SaveChanges();
@@ -148,30 +148,31 @@ namespace VSApi.Controllers
 
         // GET: wallet/edit/prices
         [HttpGet("Edit/prices")]
-        public IActionResult updatePrices()
+        public IActionResult UpdatePrices()
         {
-            List<Crypto> cryptoList = new List<Crypto>();
-            List<Wallet> walletList = new List<Wallet>();
+            var cryptoList = _ctx.Cryptos.ToList();
+            var walletList = _ctx.Wallet.ToList();
 
-            cryptoList = _ctx.Cryptos.ToList();
-            walletList = _ctx.Wallet.ToList();
+            // if (walletList == null)
+            // {
+            //     return NotFound();
+            // }
 
-            if (walletList == null)
+            foreach (var cryptoWallet in walletList)
             {
-                return NotFound();
+                var crypto = cryptoList.Find(c => c.IdCrypto == cryptoWallet.IdCrypto);
+                if (crypto != null)
+                {
+                    cryptoWallet.Price = crypto.Price;
+                    cryptoWallet.Change24h = crypto.Change24h;
+                    cryptoWallet.Change7d = crypto.Change7d;
+                }
+
+                cryptoWallet.Change = WalletOperations.CalculateAlerts(cryptoWallet);
+                // Console.WriteLine(cryptoWallet.Change);
+                _ctx.Wallet.Update(cryptoWallet);
             }
 
-            foreach(var cryptoWallet in walletList)
-                    {
-                        Crypto crypto = cryptoList.Find(c => c.IdCrypto == cryptoWallet.IdCrypto);
-                        cryptoWallet.Price = crypto.Price;
-                        cryptoWallet.Change24h = crypto.Change24h;
-                        cryptoWallet.Change7d = crypto.Change7d;
-                        cryptoWallet.Change = WalletOperations.calculateAlerts(cryptoWallet) ;
-                        // Console.WriteLine(cryptoWallet.Change);
-                        _ctx.Wallet.Update(cryptoWallet); 
-                    }
-             
             _ctx.SaveChanges();
 
             return Ok(walletList);
@@ -179,16 +180,15 @@ namespace VSApi.Controllers
 
         // GET: wallet/check/alerts
         [HttpGet("check/alerts")]
-        public IActionResult checkAlerts()
+        public IActionResult CheckAlerts()
         {
-            List<Wallet> walletList = new List<Wallet>();
-            walletList = _ctx.Wallet.ToList();
+            var walletList = _ctx.Wallet.ToList();
 
-            foreach(var cryptoWallet in walletList)
-                    {
-                      WalletOperations.getAlerts(cryptoWallet) ; 
-                    }
-            
+            foreach (var cryptoWallet in walletList)
+            {
+                WalletOperations.GetAlerts(cryptoWallet);
+            }
+
             return Ok();
         }
 
