@@ -7,33 +7,47 @@ using VSApi.Interfaces;
 
 namespace VSApi.Data
 {
-    public abstract class Repository<TModel> : IRepository<TModel> where TModel : class
+    public abstract class Repository<TEntity> : IRepository<TEntity> where TEntity : class
     {
-        protected readonly DbContext DatabaseContext;
+        protected readonly DbContext databaseContext;
 
         public Repository(DbContext context)
         {
-            this.DatabaseContext = context;
+            databaseContext = context;
         }
 
-        public void Add(TModel entity)
+        public IEnumerable<TEntity> GetAll()
         {
-            DatabaseContext.Set<TModel>().Add(entity);
+            return databaseContext.Set<TEntity>().ToList();
         }
 
-        public TModel Get(int id)
+        public TEntity Get(int id)
         {
-            return DatabaseContext.Set<TModel>().Find(id);
+            return databaseContext.Set<TEntity>().Find(id);
         }
 
-        public IEnumerable<TModel> GetAll()
+        public async Task<TEntity> AddAsync(TEntity entity)
         {
-            return DatabaseContext.Set<TModel>().ToList();
+            if (entity == null)
+            {
+                throw new ArgumentNullException($"{nameof(AddAsync)} entity must not be null");
+            }
+            await databaseContext.Set<TEntity>().AddAsync(entity);
+            await databaseContext.SaveChangesAsync();
+
+            return entity;
         }
 
-        public void Remove(TModel entity)
+        public async Task<TEntity> UpdateAsync(TEntity entity)
         {
-            DatabaseContext.Set<TModel>().Remove(entity);
+            throw new NotImplementedException();
         }
+
+        public void Remove(TEntity entity)
+        {
+            databaseContext.Set<TEntity>().Remove(entity);
+        }
+
+
     }
 }
