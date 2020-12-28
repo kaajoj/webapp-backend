@@ -16,12 +16,12 @@ namespace VSApi.Controllers
     [Route("api/[controller]")]
     public class CryptoController : ControllerBase
     {
-        private readonly ApiContext _ctx;
+        private readonly ICryptoRepository _cryptoRepository;
         private readonly ICoinMarketCapApiService _coinMarketCapApiService;
         private string _response;
-        public CryptoController(ApiContext ctx, ICoinMarketCapApiService coinMarketCapApiService)
+        public CryptoController(ICryptoRepository cryptoRepository, ICoinMarketCapApiService coinMarketCapApiService)
         {
-            _ctx = ctx;
+            _cryptoRepository = cryptoRepository;
             _coinMarketCapApiService = coinMarketCapApiService;
         }
 
@@ -29,7 +29,7 @@ namespace VSApi.Controllers
         [HttpGet]
         public IActionResult Get()
         {
-            var data = _ctx.Cryptos.OrderBy(c => c.Rank);
+            var data = _cryptoRepository.GetAll().OrderBy(c => c.Rank);
             return Ok(data);
         }
 
@@ -37,7 +37,7 @@ namespace VSApi.Controllers
         [HttpGet("{id}", Name = "GetCrypto")]
         public IActionResult Get(int id)
         {
-            var crypto = _ctx.Cryptos.Find(id);
+            var crypto = _cryptoRepository.Get(id);
             return Ok(crypto);
         }
 
@@ -57,18 +57,18 @@ namespace VSApi.Controllers
 
                 foreach(var crypto in cryptos)
                 {
-                    if (!_ctx.Cryptos.Any())
+                    if (!_cryptoRepository.GetAll().Any())
                     {
-                        await _ctx.Cryptos.AddAsync(crypto);
-                        _ = await _ctx.SaveChangesAsync();
+                        _cryptoRepository.Add(crypto);
+                        // _ = await _ctx.SaveChangesAsync();
                     }
                     else {
-                        var cryptoToUpdate = _ctx.Cryptos.First(c => c.IdCrypto == crypto.IdCrypto);
-                        cryptoToUpdate.Price = crypto.Price;
-                        cryptoToUpdate.Change24h = crypto.Change24h;
-                        cryptoToUpdate.Change7d = crypto.Change7d;
-                        _ctx.Cryptos.Update(cryptoToUpdate);
-                        _ = await _ctx.SaveChangesAsync();
+                        // var cryptoToUpdate = _ctx.Cryptos.First(c => c.IdCrypto == crypto.IdCrypto);
+                        // cryptoToUpdate.Price = crypto.Price;
+                        // cryptoToUpdate.Change24h = crypto.Change24h;
+                        // cryptoToUpdate.Change7d = crypto.Change7d;
+                        // _ctx.Cryptos.Update(cryptoToUpdate);
+                        // _ = await _ctx.SaveChangesAsync();
                     }                                           
                 }
                
@@ -78,7 +78,7 @@ namespace VSApi.Controllers
                 Console.WriteLine(e);
             }
 
-            var data = _ctx.Cryptos.OrderBy(c => c.Rank);
+            var data = _cryptoRepository.GetAll().OrderBy(c => c.Rank);
             return Ok(data);
         }
 
@@ -91,8 +91,8 @@ namespace VSApi.Controllers
                 return BadRequest();
             }
 
-            _ctx.Cryptos.Add(crypto);
-            _ctx.SaveChanges();
+            _cryptoRepository.Add(crypto);
+            // _ctx.SaveChanges();
 
             return CreatedAtRoute("GetCrypto", new { id = crypto.IdCrypto }, crypto);
         }
@@ -107,20 +107,20 @@ namespace VSApi.Controllers
                 return NotFound();
             }
 
-            var crypto = _ctx.Cryptos.FirstOrDefault(c => c.Rank == id);
+            // var crypto = _ctx.Cryptos.FirstOrDefault(c => c.Rank == id);
 
-            if (crypto == null)
-            {
-                return NotFound();
-            }
+            // if (crypto == null)
+            // {
+            //     return NotFound();
+            // }
 
-            crypto.OwnFlag = flag;
+            // crypto.OwnFlag = flag;
             
-            Console.WriteLine(crypto);
-            _ctx.Cryptos.Update(crypto);
-            _ctx.SaveChanges();
-
-            return Ok(crypto);
+            // Console.WriteLine(crypto);
+            // _ctx.Cryptos.Update(crypto);
+            // _ctx.SaveChanges();
+            return Ok();
+            // return Ok(crypto);
         }
 
     }

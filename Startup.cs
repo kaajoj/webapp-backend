@@ -83,6 +83,7 @@ namespace VSApi
 
             // DI
             services.AddScoped<ICoinMarketCapApiService, CoinMarketCapApiService>();
+            services.AddScoped<ICryptoRepository, CryptoRepository>();
 
             // Add ASP.NET Core Identity support
             services.AddDefaultIdentity<ApplicationUser>(options =>
