@@ -10,7 +10,9 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using VSApi.Data;
+using VSApi.Interfaces;
 using VSApi.Models;
+using VSApi.Services;
 
 namespace VSApi
 {
@@ -78,6 +80,9 @@ namespace VSApi
             services.AddDbContext<ApiContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("connectionString"))
             );
+
+            // DI
+            services.AddScoped<ICoinMarketCapApiService, CoinMarketCapApiService>();
 
             // Add ASP.NET Core Identity support
             services.AddDefaultIdentity<ApplicationUser>(options =>
