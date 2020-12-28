@@ -59,8 +59,7 @@ namespace VSApi.Controllers
                 {
                     if (!_cryptoRepository.GetAll().Any())
                     {
-                        _cryptoRepository.Add(crypto);
-                        // _ = await _ctx.SaveChangesAsync();
+                        await _cryptoRepository.AddAsync(crypto);
                     }
                     else {
                         // var cryptoToUpdate = _ctx.Cryptos.First(c => c.IdCrypto == crypto.IdCrypto);
@@ -91,8 +90,7 @@ namespace VSApi.Controllers
                 return BadRequest();
             }
 
-            _cryptoRepository.Add(crypto);
-            // _ctx.SaveChanges();
+            _cryptoRepository.AddAsync(crypto);
 
             return CreatedAtRoute("GetCrypto", new { id = crypto.IdCrypto }, crypto);
         }
