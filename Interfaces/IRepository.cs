@@ -5,11 +5,12 @@ using System.Threading.Tasks;
 
 namespace VSApi.Interfaces
 {
-    public interface IRepository<TModel> where TModel : class
+    public interface IRepository<TEntity> where TEntity : class
     {
-        TModel Get(int id);
-        IEnumerable<TModel> GetAll();
-        void Add(TModel entity);
-        void Remove(TModel entity);
+        IEnumerable<TEntity> GetAll();
+        TEntity Get(int id);
+        Task<TEntity> AddAsync(TEntity entity);
+        Task<TEntity> UpdateAsync(TEntity entity);
+        void Remove(TEntity entity);
     }
 }
