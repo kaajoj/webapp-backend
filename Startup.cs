@@ -16,8 +16,6 @@ namespace VSApi
 {
     public class Startup
     {
-        private string _connectionString = null;
-
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -47,11 +45,11 @@ namespace VSApi
             var client = new WebClient();
             client.DownloadString(urlUpdateApi.ToString());
             client.DownloadString(urlUpdateWallet.ToString());
-            
+
             Console.WriteLine("API refreshed at {0}", e.SignalTime);
         }
 
-           private static void OnTimedEventEmails(Object source, ElapsedEventArgs e)
+        private static void OnTimedEventEmails(Object source, ElapsedEventArgs e)
         {
             var urlCheckAlerts = new UriBuilder("https://localhost:5001/api/wallet/check/alerts/");
             var client = new WebClient();
@@ -65,9 +63,10 @@ namespace VSApi
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddCors(options => {
+            services.AddCors(options =>
+            {
                 options.AddPolicy(name: "CorsPolicy",
-                    builder  => builder.AllowAnyOrigin()
+                    builder => builder.AllowAnyOrigin()
                     .AllowAnyHeader()
                     .AllowAnyMethod());
             });
@@ -75,11 +74,9 @@ namespace VSApi
             services.AddMvc(option => option.EnableEndpointRouting = false)
                 .AddNewtonsoftJson();
 
-            _connectionString = Configuration.GetConnectionString("connectionString");
-
             // Add ApplicationDbContext.
             services.AddDbContext<ApiContext>(options =>
-                options.UseSqlServer(_connectionString)
+                options.UseSqlServer(Configuration.GetConnectionString("connectionString"))
             );
 
             // Add ASP.NET Core Identity support
