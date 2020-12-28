@@ -1,11 +1,12 @@
 using System;
 using System.Net;
 using System.Web;
+using VSApi.Interfaces;
 using VSApi.Models;
 
 namespace VSApi.Services
 {
-    public class CoinMarketCapApi
+    public class CoinMarketCapApiService : ICoinMarketCapApiService
     {
         private const string API_KEY = "f742b5ad-230c-4dfe-b1dc-7fbe4ec51be4";
 
@@ -28,7 +29,7 @@ namespace VSApi.Services
             return response;
         }
 
-        static string MakeAPICall()
+        public string MakeAPICall()
         {
             var URL = new UriBuilder("https://pro-api.coinmarketcap.com/v1/cryptocurrency/listings/latest");
 

@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json.Linq;
 using VSApi.Data;
+using VSApi.Interfaces;
 using VSApi.Models;
 using VSApi.Services;
 
@@ -16,10 +17,12 @@ namespace VSApi.Controllers
     public class CryptoController : ControllerBase
     {
         private readonly ApiContext _ctx;
+        private readonly ICoinMarketCapApiService _coinMarketCapApiService;
         private string _response;
-        public CryptoController(ApiContext ctx)
+        public CryptoController(ApiContext ctx, ICoinMarketCapApiService coinMarketCapApiService)
         {
             _ctx = ctx;
+            _coinMarketCapApiService = coinMarketCapApiService;
         }
 
         // GET: api/crypto
@@ -42,14 +45,13 @@ namespace VSApi.Controllers
         public async Task<IActionResult> GetCmcApi()
         {
             var cryptos = new List<Crypto>();
-            CoinMarketCapApi coinMarketCapApi = new CoinMarketCapApi();
-            _response = coinMarketCapApi.CmcGet();
+            _response = _coinMarketCapApiService.CmcGet();
             dynamic jsonObj = JObject.Parse(_response);
             try
             {
                 for (var i = 0; i < 15; i++)
                 {
-                    var cryptoTemp = coinMarketCapApi.CmcJsonParse(jsonObj, i);
+                    var cryptoTemp = _coinMarketCapApiService.CmcJsonParse(jsonObj, i);
                     cryptos.Add(cryptoTemp);
                 }
 
