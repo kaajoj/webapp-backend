@@ -16,7 +16,6 @@ namespace VSApi.Data
         }
 
         public DbSet<Crypto> Cryptos { get; set; }
-
         public DbSet<Wallet> Wallet { get; set; }
     }
 }
