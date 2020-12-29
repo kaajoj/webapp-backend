@@ -80,8 +80,9 @@ namespace VSApi.Controllers
                 Console.WriteLine(e);
             }
 
-            var data = _cryptoRepository.GetAll().OrderBy(c => c.Rank);
-            return Ok(data);
+            // var data = _cryptoRepository.GetAll().OrderBy(c => c.Rank);
+            // return Ok(data);
+            return Ok();
         }
 
         // api/crypto/
