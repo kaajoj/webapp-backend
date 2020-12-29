@@ -107,21 +107,18 @@ namespace VSApi.Controllers
             {
                 return NotFound();
             }
+            var crypto = _cryptoRepository.GetCryptoByRank(id);
 
-            // var crypto = _ctx.Cryptos.FirstOrDefault(c => c.Rank == id);
+            if (crypto == null)
+            {
+                return NotFound();
+            }
 
-            // if (crypto == null)
-            // {
-            //     return NotFound();
-            // }
+            crypto.OwnFlag = flag;
 
-            // crypto.OwnFlag = flag;
-            
-            // Console.WriteLine(crypto);
-            // _ctx.Cryptos.Update(crypto);
-            // _ctx.SaveChanges();
-            return Ok();
-            // return Ok(crypto);
+            _cryptoRepository.UpdateAsync(crypto);
+
+            return Ok(crypto);
         }
 
     }
