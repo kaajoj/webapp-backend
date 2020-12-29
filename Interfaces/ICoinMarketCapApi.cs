@@ -8,7 +8,7 @@ namespace VSApi.Interfaces
     public interface ICoinMarketCapApiService
     {
         string CmcGet();
-        string MakeAPICall();
+        string MakeApiCall();
         Crypto CmcJsonParse(dynamic jsonObj, int i);
     }
 }

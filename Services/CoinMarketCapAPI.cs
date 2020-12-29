@@ -16,7 +16,7 @@ namespace VSApi.Services
 
             try
             {
-                response = MakeAPICall();
+                response = MakeApiCall();
                 Console.WriteLine(response);
                 Console.WriteLine("COINMARKETCAP API makeAPICall OK");
             }
@@ -29,7 +29,7 @@ namespace VSApi.Services
             return response;
         }
 
-        public string MakeAPICall()
+        public string MakeApiCall()
         {
             var URL = new UriBuilder("https://pro-api.coinmarketcap.com/v1/cryptocurrency/listings/latest");
 
