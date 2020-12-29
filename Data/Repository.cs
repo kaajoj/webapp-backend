@@ -9,21 +9,21 @@ namespace VSApi.Data
 {
     public abstract class Repository<TEntity> : IRepository<TEntity> where TEntity : class
     {
-        protected readonly DbContext databaseContext;
+        protected readonly DbContext _databaseContext;
 
         public Repository(DbContext context)
         {
-            databaseContext = context;
+            _databaseContext = context;
         }
 
         public IEnumerable<TEntity> GetAll()
         {
-            return databaseContext.Set<TEntity>().ToList();
+            return _databaseContext.Set<TEntity>().ToList();
         }
 
         public TEntity Get(int id)
         {
-            return databaseContext.Set<TEntity>().Find(id);
+            return _databaseContext.Set<TEntity>().Find(id);
         }
 
         public async Task<TEntity> AddAsync(TEntity entity)
@@ -32,20 +32,23 @@ namespace VSApi.Data
             {
                 throw new ArgumentNullException($"{nameof(AddAsync)} entity must not be null");
             }
-            await databaseContext.Set<TEntity>().AddAsync(entity);
-            await databaseContext.SaveChangesAsync();
+            await _databaseContext.Set<TEntity>().AddAsync(entity);
+            await _databaseContext.SaveChangesAsync();
 
             return entity;
         }
 
         public async Task<TEntity> UpdateAsync(TEntity entity)
         {
-            throw new NotImplementedException();
+            _databaseContext.Set<TEntity>().Update(entity);
+            await _databaseContext.SaveChangesAsync();
+
+            return entity;
         }
 
         public void Remove(TEntity entity)
         {
-            databaseContext.Set<TEntity>().Remove(entity);
+            _databaseContext.Set<TEntity>().Remove(entity);
         }
 
 
