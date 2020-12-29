@@ -8,5 +8,6 @@ namespace VSApi.Interfaces
 {
     public interface IWalletRepository : IRepository<Wallet>
     {
+        Wallet GetWalletByRank(int? rank);
     }
 }
