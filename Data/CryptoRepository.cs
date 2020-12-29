@@ -10,8 +10,13 @@ namespace VSApi.Data
 {
     public class CryptoRepository : Repository<Crypto>, ICryptoRepository
     {
-        public CryptoRepository(ApiContext context) : base(context)
+        public CryptoRepository(ApiContext context) : base(context) { }
+
+        public ApiContext apiContext => _databaseContext as ApiContext;
+
+        public Crypto GetCryptoByIdCrypto(int idCrypto)
         {
+            return apiContext.Cryptos.FirstOrDefault(c => c.IdCrypto == idCrypto);
         }
     }
 }
