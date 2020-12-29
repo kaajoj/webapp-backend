@@ -61,14 +61,17 @@ namespace VSApi.Controllers
                     {
                         await _cryptoRepository.AddAsync(crypto);
                     }
-                    else {
-                        // var cryptoToUpdate = _ctx.Cryptos.First(c => c.IdCrypto == crypto.IdCrypto);
-                        // cryptoToUpdate.Price = crypto.Price;
-                        // cryptoToUpdate.Change24h = crypto.Change24h;
-                        // cryptoToUpdate.Change7d = crypto.Change7d;
-                        // _ctx.Cryptos.Update(cryptoToUpdate);
-                        // _ = await _ctx.SaveChangesAsync();
-                    }                                           
+                    else
+                    {
+                        var cryptoToUpdate  = _cryptoRepository.GetCryptoByIdCrypto(crypto.IdCrypto);
+                        if(cryptoToUpdate != null)
+                        {
+                            cryptoToUpdate.Price = crypto.Price;
+                            cryptoToUpdate.Change24h = crypto.Change24h;
+                            cryptoToUpdate.Change7d = crypto.Change7d;
+                            await _cryptoRepository.UpdateAsync(cryptoToUpdate);
+                        }
+                    }
                 }
                
             }
