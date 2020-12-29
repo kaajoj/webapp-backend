@@ -18,14 +18,14 @@ namespace VSApi.Controllers
     {
         private readonly ICryptoRepository _cryptoRepository;
         private readonly ICoinMarketCapApiService _coinMarketCapApiService;
-        private string _response;
+
         public CryptoController(ICryptoRepository cryptoRepository, ICoinMarketCapApiService coinMarketCapApiService)
         {
             _cryptoRepository = cryptoRepository;
             _coinMarketCapApiService = coinMarketCapApiService;
         }
 
-        // GET: api/crypto
+        // api/crypto
         [HttpGet]
         public IActionResult Get()
         {
@@ -33,7 +33,7 @@ namespace VSApi.Controllers
             return Ok(data);
         }
 
-        // GET api/crypto/5
+        // api/crypto/5
         [HttpGet("{id}", Name = "GetCrypto")]
         public IActionResult Get(int id)
         {
@@ -41,12 +41,13 @@ namespace VSApi.Controllers
             return Ok(crypto);
         }
 
+        // api/crypto/getcmcapi
         [HttpGet("GetCmcApi")]
         public async Task<IActionResult> GetCmcApi()
         {
             var cryptos = new List<Crypto>();
-            _response = _coinMarketCapApiService.CmcGet();
-            dynamic jsonObj = JObject.Parse(_response);
+            var cmcResponse = _coinMarketCapApiService.CmcGet();
+            dynamic jsonObj = JObject.Parse(cmcResponse);
             try
             {
                 for (var i = 0; i < 15; i++)
@@ -73,19 +74,16 @@ namespace VSApi.Controllers
                         }
                     }
                 }
-               
             }
             catch (Exception e)
             {
                 Console.WriteLine(e);
             }
 
-            // var data = _cryptoRepository.GetAll().OrderBy(c => c.Rank);
-            // return Ok(data);
             return Ok();
         }
 
-        // api/crypto/
+        // api/crypto
         [HttpPost]
         public IActionResult Post([FromBody] Crypto crypto)
         {
@@ -100,7 +98,7 @@ namespace VSApi.Controllers
         }
 
         // Old function
-        // GET: crypto/edit/1/own/5
+        // crypto/edit/1/own/5
         [HttpGet("Edit/{id}/own/{flag}")]
         public IActionResult Edit(int? id, int flag)
         {
