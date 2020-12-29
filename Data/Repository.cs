@@ -49,6 +49,7 @@ namespace VSApi.Data
         public void Remove(TEntity entity)
         {
             _databaseContext.Set<TEntity>().Remove(entity);
+            _databaseContext.SaveChanges();
         }
 
 
