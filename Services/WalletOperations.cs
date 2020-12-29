@@ -3,7 +3,7 @@ using VSApi.Models;
 
 namespace VSApi.Services
 {
-    class WalletOperations
+    public class WalletOperations
     {
         public static Wallet CalculateSum(Wallet crypto)
         {
