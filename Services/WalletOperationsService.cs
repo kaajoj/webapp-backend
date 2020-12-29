@@ -1,23 +1,24 @@
 using System;
+using VSApi.Interfaces;
 using VSApi.Models;
 
 namespace VSApi.Services
 {
-    public class WalletOperationsService
+    public class WalletOperationsService : IWalletOperationsService
     {
-        public static Wallet CalculateSum(Wallet crypto)
+        public Wallet CalculateSum(Wallet crypto)
         {
             crypto.Sum = Math.Round((Convert.ToDouble(crypto.Price) * Convert.ToDouble(crypto.Quantity)), 2).ToString();
             return crypto;
         }
 
-        public static string CalculateAlerts(Wallet crypto)
+        public string CalculateAlerts(Wallet crypto)
         {
             crypto.Change = Math.Round((((Convert.ToDouble(crypto.Price) / Convert.ToDouble(crypto.OldPrice) - 1) * 100)), 2).ToString();
             return crypto.Change;
         }
 
-        public static void GetAlerts(Wallet crypto)
+        public void GetAlerts(Wallet crypto)
         {
             if (Convert.ToDouble(crypto.Change) < -Convert.ToDouble(crypto.AlertDown))
             {
