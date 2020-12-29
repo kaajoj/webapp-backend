@@ -30,6 +30,7 @@ namespace VSApi.Controllers
             _walletOperationsService = walletOperationsService;
         }
 
+        // api/wallet
         [HttpGet]
         public IActionResult Get()
         {
@@ -37,7 +38,7 @@ namespace VSApi.Controllers
             return Ok(data);
         }
 
-        // GET api/wallet/5
+        // api/wallet/5
         [HttpGet("{id}", Name = "GetWallet")]
         public IActionResult Get(int id)
         {
@@ -45,7 +46,7 @@ namespace VSApi.Controllers
             return Ok(crypto);
         }
 
-        // api/wallet/
+        // api/wallet
         [HttpPost]
         public IActionResult Post([FromBody] Wallet wallet)
         {
@@ -80,7 +81,7 @@ namespace VSApi.Controllers
         }
 
 
-        // GET: wallet/edit/1/quantity/5
+        // wallet/edit/1/quantity/5
         [HttpGet("Edit/{id}/quantity/{quantity}")]
         public IActionResult EditQuantity(int? id, string quantity)
         {
@@ -103,7 +104,7 @@ namespace VSApi.Controllers
         }
 
 
-        // GET: wallet/edit/1/alertup/5
+        // wallet/edit/1/alertup/5
         [HttpGet("Edit/{id}/alertup/{alertup}")]
         public IActionResult SetAlertUp(int? id, string alertup)
         {
@@ -123,7 +124,7 @@ namespace VSApi.Controllers
             return Ok(crypto);
         }
 
-        // GET: wallet/edit/1/alertdown/5
+        // wallet/edit/1/alertdown/5
         [HttpGet("Edit/{id}/alertdown/{alertdown}")]
         public IActionResult SetAlertDown(int? id, string alertdown)
         {
@@ -143,17 +144,12 @@ namespace VSApi.Controllers
             return Ok(crypto);
         }
 
-        // GET: wallet/edit/prices
+        // wallet/edit/prices
         [HttpGet("Edit/prices")]
         public IActionResult UpdatePrices()
         {
             var cryptoList = _cryptoRepository.GetAll().ToList();
             var walletList = _walletRepository.GetAll().ToList();
-
-            // if (walletList == null)
-            // {
-            //     return NotFound();
-            // }
 
             foreach (var cryptoWallet in walletList)
             {
@@ -169,10 +165,10 @@ namespace VSApi.Controllers
                 _walletRepository.UpdateAsync(cryptoWallet);
             }
 
-            return Ok(walletList);
+            return Ok();
         }
 
-        // GET: wallet/check/alerts
+        // wallet/check/alerts
         [HttpGet("check/alerts")]
         public IActionResult CheckAlerts()
         {
