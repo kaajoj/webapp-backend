@@ -22,15 +22,17 @@ namespace VSApi.Services
         {
             if (Convert.ToDouble(crypto.Change) < -Convert.ToDouble(crypto.AlertDown))
             {
-                string buyStr = "Price is below your alert(-" + crypto.AlertDown + "%)  -  buy  " + crypto.Name + "(" + crypto.Symbol + ")" + "";
-                Emails emails = new Emails();
-                emails.prepareMessage(buyStr, crypto.Price, crypto.OldPrice, crypto.Change);
+                var buyStr = "Price is below your alert(-" + crypto.AlertDown + "%)  -  buy  " + crypto.Name + "(" + crypto.Symbol + ")" + "";
+                var emails = new Emails();
+                var message = emails.PrepareMessage(buyStr, crypto.Price, crypto.OldPrice, crypto.Change);
+                emails.SendMessage(message);
             }
             if (Convert.ToDouble(crypto.Change) > Convert.ToDouble(crypto.AlertUp))
             {
-                string sellStr = "Price is above your alert(" + crypto.AlertUp + "%)  -  sell  " + crypto.Name + "(" + crypto.Symbol + ")" + "";
-                Emails emails = new Emails();
-                emails.prepareMessage(sellStr, crypto.Price, crypto.OldPrice, crypto.Change);
+                var sellStr = "Price is above your alert(" + crypto.AlertUp + "%)  -  sell  " + crypto.Name + "(" + crypto.Symbol + ")" + "";
+                var emails = new Emails();
+                var message = emails.PrepareMessage(sellStr, crypto.Price, crypto.OldPrice, crypto.Change);
+                emails.SendMessage(message);
             }
         }
 

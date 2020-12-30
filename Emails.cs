@@ -1,4 +1,5 @@
 using System;
+using MailKit;
 using MailKit.Net.Smtp;
 using MimeKit;
 
@@ -6,43 +7,43 @@ namespace VSApi
 {
     public class Emails
     {
-        public void prepareMessage(String alertStr, String price, String oldPrice, String change)
+        public MimeMessage PrepareMessage(string alertStr, string price, string oldPrice, string change)
         {
-        MimeMessage message = new MimeMessage();
-        MailboxAddress from = new MailboxAddress("CryptoWebApp", "karol.testm@gmail.com");
-        message.From.Add(from);
-        MailboxAddress to = new MailboxAddress("kaajooj@gmail.com", "kaajooj@gmail.com");
-        message.To.Add(to);
-        message.Subject = "Price alert notification";
+            var message = new MimeMessage();
+            var from = new MailboxAddress("CryptoWebApp", "karol.testm@gmail.com");
+            message.From.Add(from);
+            var to = new MailboxAddress("kaajooj@gmail.com", "kaajooj@gmail.com");
+            message.To.Add(to);
+            message.Subject = "Price alert notification";
 
-        BodyBuilder bodyBuilder = new BodyBuilder();
-        bodyBuilder.HtmlBody = "<h1>Automatic alert</h1><p><font color='green'><h4>"+ alertStr +"</h4></font></p>"  + 
-           "<p>Current Price: " + "<b><font color='green'>"+price+"</font></b>" + "<br>" +
-           "Old Price: " + "<b><font color='green'>"+oldPrice+"</font></b>" + "<br>" +
-           "Price change: " + "<b><font color='green'>"+change+"%</font></b>" + "</p>" +
-           "<p><a href='http://localhost:4200/wallet' style='color:green'>Open your wallet</a></p>";
-        message.Body = bodyBuilder.ToMessageBody();
+            var bodyBuilder = new BodyBuilder
+            {
+                HtmlBody = "<h1>Automatic alert</h1><p><font color='green'><h4>" + alertStr + "</h4></font></p>" +
+               "<p>Current Price: " + "<b><font color='green'>" + price + "</font></b>" + "<br>" +
+               "Old Price: " + "<b><font color='green'>" + oldPrice + "</font></b>" + "<br>" +
+               "Price change: " + "<b><font color='green'>" + change + "%</font></b>" + "</p>" +
+               "<p><a href='http://localhost:4200/wallet' style='color:green'>Open your wallet</a></p>"
+            };
+            message.Body = bodyBuilder.ToMessageBody();
 
-        connectionMessage(message);
-        }
-       
-        private static void connectionMessage(MimeMessage message)
-        {
-            SmtpClient client = new SmtpClient();
-            client.Connect("smtp.gmail.com", 587, MailKit.Security.SecureSocketOptions.StartTls);
-            client.Authenticate("karol.testm@gmail.com", "ZJQVkPD6Ttest");
-            sendMessage(message, client);
+            return message;
         }
 
-        
-        private static void sendMessage(MimeMessage message, SmtpClient client)
+        public void SendMessage(MimeMessage message)
         {
+            var client = MessageConnectionData();
             client.Send(message);
             client.Disconnect(true);
             client.Dispose();
         }
-        
 
+        private static IMailTransport MessageConnectionData()
+        {
+            var client = new SmtpClient();
+            client.Connect("smtp.gmail.com", 587, MailKit.Security.SecureSocketOptions.StartTls);
+            client.Authenticate("karol.testm@gmail.com", "ZJQVkPD6Ttest");
+            return client;
+        }
     }
 
 }
