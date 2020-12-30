@@ -11,6 +11,6 @@ namespace VSApi.Interfaces
         TEntity Get(int id);
         Task<TEntity> AddAsync(TEntity entity);
         Task<TEntity> UpdateAsync(TEntity entity);
-        void Remove(TEntity entity);
+        Task RemoveAsync(TEntity entity);
     }
 }

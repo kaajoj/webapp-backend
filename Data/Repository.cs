@@ -40,18 +40,24 @@ namespace VSApi.Data
 
         public async Task<TEntity> UpdateAsync(TEntity entity)
         {
+            if (entity == null)
+            {
+                throw new ArgumentNullException($"{nameof(UpdateAsync)} entity must not be null");
+            }
             _databaseContext.Set<TEntity>().Update(entity);
             await _databaseContext.SaveChangesAsync();
 
             return entity;
         }
 
-        public void Remove(TEntity entity)
+        public async Task RemoveAsync(TEntity entity)
         {
+            if (entity == null)
+            {
+                throw new ArgumentNullException($"{nameof(RemoveAsync)} entity must not be null");
+            }
             _databaseContext.Set<TEntity>().Remove(entity);
-            _databaseContext.SaveChanges();
+            await _databaseContext.SaveChangesAsync();
         }
-
-
     }
 }

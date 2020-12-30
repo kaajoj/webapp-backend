@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using VSApi.Data;
@@ -62,7 +63,7 @@ namespace VSApi.Controllers
 
         // api/wallet/delete/3
         [HttpDelete("delete/{id}")]
-        public IActionResult Delete(int? id)
+        public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
             {
@@ -76,7 +77,7 @@ namespace VSApi.Controllers
                 return NotFound();
             }
 
-            _walletRepository.Remove(crypto);
+            await _walletRepository.RemoveAsync(crypto);
             return Ok(crypto);
         }
 
