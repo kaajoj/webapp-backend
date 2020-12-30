@@ -1,36 +1,33 @@
 using System;
 using System.Net;
 using System.Web;
+using VSApi.Interfaces;
 using VSApi.Models;
 
 namespace VSApi.Services
 {
-    public class CoinMarketCapApi
+    public class CoinMarketCapApiService : ICoinMarketCapApiService
     {
-        private const string API_KEY = "f742b5ad-230c-4dfe-b1dc-7fbe4ec51be4";
+        private const string ApiKey = "f742b5ad-230c-4dfe-b1dc-7fbe4ec51be4";
 
         public string CmcGet()
         {
-            var response = "";
-
             try
             {
-                response = MakeAPICall();
-                Console.WriteLine(response);
-                Console.WriteLine("COINMARKETCAP API makeAPICall OK");
+                var response = MakeApiCall();
+                return response;
+
             }
             catch (WebException e)
             {
                 Console.WriteLine(e.Message);
-                Console.WriteLine("COINMARKETCAP API EXCEPTION");
+                throw;
             }
-
-            return response;
         }
 
-        static string MakeAPICall()
+        public string MakeApiCall()
         {
-            var URL = new UriBuilder("https://pro-api.coinmarketcap.com/v1/cryptocurrency/listings/latest");
+            var url = new UriBuilder("https://pro-api.coinmarketcap.com/v1/cryptocurrency/listings/latest");
 
             var queryString = HttpUtility.ParseQueryString(string.Empty);
             // queryString["start"] = "1";
@@ -38,42 +35,33 @@ namespace VSApi.Services
             // queryString["convert"] = "USD,BTC";
             // queryString["convert"] = "BTC";
 
-
-            URL.Query = queryString.ToString();
+            url.Query = queryString.ToString();
 
             var client = new WebClient();
-            client.Headers.Add("X-CMC_PRO_API_KEY", API_KEY);
+            client.Headers.Add("X-CMC_PRO_API_KEY", ApiKey);
             client.Headers.Add("Accepts", "application/json");
-            return client.DownloadString(URL.ToString());
-
+            return client.DownloadString(url.ToString());
         }
 
         public Crypto CmcJsonParse(dynamic jsonObj, int i)
         {
-            Crypto cryptoTemp = new Crypto();
+            var cryptoTemp = new Crypto();
             // checkId = jsonObj["data"]["" + id + ""].ToString();
             string cryptoId = jsonObj.SelectToken("$.data[" + i + "].id").ToString();
             string cryptoName = jsonObj.SelectToken("$.data[" + i + "].name").ToString();
             string cryptoSymbol = jsonObj.SelectToken("$.data[" + i + "].symbol").ToString();
             string cryptoRank = jsonObj.SelectToken("$.data[" + i + "].cmc_rank").ToString();
             string cryptoPrice = Math.Round(Convert.ToDecimal(jsonObj.SelectToken("$.data[" + i + "].quote.USD.price")), 2).ToString();
-            string cryptoChange_24h = Math.Round(Convert.ToDecimal(jsonObj.SelectToken("$.data[" + i + "].quote.USD.percent_change_24h")), 2).ToString();
-            string cryptoChange_7d = Math.Round(Convert.ToDecimal(jsonObj.SelectToken("$.data[" + i + "].quote.USD.percent_change_7d")), 2).ToString();
-            Console.WriteLine(cryptoId);
-            Console.WriteLine(cryptoName);
-            Console.WriteLine(cryptoSymbol);
-            Console.WriteLine(cryptoRank);
-            Console.WriteLine(cryptoPrice);
-            Console.WriteLine(cryptoChange_24h);
-            Console.WriteLine(cryptoChange_7d);
+            string cryptoChange24H = Math.Round(Convert.ToDecimal(jsonObj.SelectToken("$.data[" + i + "].quote.USD.percent_change_24h")), 2).ToString();
+            string cryptoChange7D = Math.Round(Convert.ToDecimal(jsonObj.SelectToken("$.data[" + i + "].quote.USD.percent_change_7d")), 2).ToString();
 
             cryptoTemp.IdCrypto = Convert.ToInt16(cryptoId);
             cryptoTemp.Name = cryptoName;
             cryptoTemp.Symbol = cryptoSymbol;
             cryptoTemp.Rank = Convert.ToInt16(cryptoRank);
             cryptoTemp.Price = cryptoPrice;
-            cryptoTemp.Change24h = cryptoChange_24h;
-            cryptoTemp.Change7d = cryptoChange_7d;
+            cryptoTemp.Change24h = cryptoChange24H;
+            cryptoTemp.Change7d = cryptoChange7D;
             cryptoTemp.OwnFlag = 0;
 
             return cryptoTemp;

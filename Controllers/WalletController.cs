@@ -1,8 +1,11 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using VSApi.Data;
+using VSApi.Interfaces;
 using VSApi.Models;
 using VSApi.Services;
 
@@ -14,29 +17,37 @@ namespace VSApi.Controllers
     [Route("api/[controller]")]
     public class WalletController : ControllerBase
     {
-        private readonly ApiContext _ctx;
+        private readonly IWalletRepository _walletRepository;
+        private readonly ICryptoRepository _cryptoRepository;
+        private readonly IWalletOperationsService _walletOperationsService;
 
-        public WalletController(ApiContext ctx)
+        public WalletController(
+            IWalletRepository walletRepository, 
+            ICryptoRepository cryptoRepository, 
+            IWalletOperationsService walletOperationsService)
         {
-            _ctx = ctx;
+            _walletRepository = walletRepository;
+            _cryptoRepository = cryptoRepository;
+            _walletOperationsService = walletOperationsService;
         }
 
+        // api/wallet
         [HttpGet]
         public IActionResult Get()
         {
-            var data = _ctx.Wallet.OrderBy(c => c.Rank);
+            var data = _walletRepository.GetAll().OrderBy(c => c.Rank);
             return Ok(data);
         }
 
-        // GET api/wallet/5
+        // api/wallet/5
         [HttpGet("{id}", Name = "GetWallet")]
         public IActionResult Get(int id)
         {
-            var crypto = _ctx.Wallet.Find(id);
+            var crypto = _walletRepository.Get(id);
             return Ok(crypto);
         }
 
-        // api/wallet/
+        // api/wallet
         [HttpPost]
         public IActionResult Post([FromBody] Wallet wallet)
         {
@@ -45,37 +56,33 @@ namespace VSApi.Controllers
                 return BadRequest();
             }
 
-            _ctx.Wallet.Add(wallet);
-            _ctx.SaveChanges();
-
+            _walletRepository.AddAsync(wallet);
             return CreatedAtRoute("GetWallet", new { id = wallet.Id }, wallet);
         }
 
 
         // api/wallet/delete/3
         [HttpDelete("delete/{id}")]
-        public IActionResult Delete(int? id)
+        public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var crypto = _ctx.Wallet.FirstOrDefault(c => c.Rank == id);
+            var crypto = _walletRepository.GetWalletByRank(id);
 
             if (crypto == null)
             {
                 return NotFound();
             }
 
-            _ctx.Wallet.Remove(crypto);
-            _ctx.SaveChanges();
-
+            await _walletRepository.RemoveAsync(crypto);
             return Ok(crypto);
         }
 
 
-        // GET: wallet/edit/1/quantity/5
+        // wallet/edit/1/quantity/5
         [HttpGet("Edit/{id}/quantity/{quantity}")]
         public IActionResult EditQuantity(int? id, string quantity)
         {
@@ -84,23 +91,21 @@ namespace VSApi.Controllers
                 return NotFound();
             }
 
-            var crypto = _ctx.Wallet.FirstOrDefault(c => c.Rank == id);
+            var crypto = _walletRepository.GetWalletByRank(id);
 
             if (crypto == null)
             {
                 return NotFound();
             }
-            crypto.Quantity = quantity;
-            crypto = WalletOperations.CalculateSum(crypto);
-            Console.WriteLine(crypto);
-            _ctx.Wallet.Update(crypto);
-            _ctx.SaveChanges();
 
+            crypto.Quantity = quantity;
+            crypto = _walletOperationsService.CalculateSum(crypto);
+            _walletRepository.UpdateAsync(crypto);
             return Ok(crypto);
         }
 
 
-        // GET: wallet/edit/1/alertup/5
+        // wallet/edit/1/alertup/5
         [HttpGet("Edit/{id}/alertup/{alertup}")]
         public IActionResult SetAlertUp(int? id, string alertup)
         {
@@ -109,21 +114,18 @@ namespace VSApi.Controllers
                 return NotFound();
             }
 
-            var crypto = _ctx.Wallet.FirstOrDefault(c => c.Rank == id);
+            var crypto = _walletRepository.GetWalletByRank(id);
 
             if (crypto == null)
             {
                 return NotFound();
             }
             crypto.AlertUp = alertup;
-            Console.WriteLine(crypto);
-            _ctx.Wallet.Update(crypto);
-            _ctx.SaveChanges();
-
+            _walletRepository.UpdateAsync(crypto);
             return Ok(crypto);
         }
 
-        // GET: wallet/edit/1/alertdown/5
+        // wallet/edit/1/alertdown/5
         [HttpGet("Edit/{id}/alertdown/{alertdown}")]
         public IActionResult SetAlertDown(int? id, string alertdown)
         {
@@ -132,31 +134,23 @@ namespace VSApi.Controllers
                 return NotFound();
             }
 
-            var crypto = _ctx.Wallet.FirstOrDefault(c => c.Rank == id);
+            var crypto = _walletRepository.GetWalletByRank(id);
 
             if (crypto == null)
             {
                 return NotFound();
             }
             crypto.AlertDown = alertdown;
-            Console.WriteLine(crypto);
-            _ctx.Wallet.Update(crypto);
-            _ctx.SaveChanges();
-
+            _walletRepository.UpdateAsync(crypto);
             return Ok(crypto);
         }
 
-        // GET: wallet/edit/prices
+        // wallet/edit/prices
         [HttpGet("Edit/prices")]
         public IActionResult UpdatePrices()
         {
-            var cryptoList = _ctx.Cryptos.ToList();
-            var walletList = _ctx.Wallet.ToList();
-
-            // if (walletList == null)
-            // {
-            //     return NotFound();
-            // }
+            var cryptoList = _cryptoRepository.GetAll().ToList();
+            var walletList = _walletRepository.GetAll().ToList();
 
             foreach (var cryptoWallet in walletList)
             {
@@ -168,25 +162,22 @@ namespace VSApi.Controllers
                     cryptoWallet.Change7d = crypto.Change7d;
                 }
 
-                cryptoWallet.Change = WalletOperations.CalculateAlerts(cryptoWallet);
-                // Console.WriteLine(cryptoWallet.Change);
-                _ctx.Wallet.Update(cryptoWallet);
+                cryptoWallet.Change = _walletOperationsService.CalculateAlerts(cryptoWallet);
+                _walletRepository.UpdateAsync(cryptoWallet);
             }
 
-            _ctx.SaveChanges();
-
-            return Ok(walletList);
+            return Ok();
         }
 
-        // GET: wallet/check/alerts
+        // wallet/check/alerts
         [HttpGet("check/alerts")]
         public IActionResult CheckAlerts()
         {
-            var walletList = _ctx.Wallet.ToList();
+            var walletList = _walletRepository.GetAll().ToList();
 
             foreach (var cryptoWallet in walletList)
             {
-                WalletOperations.GetAlerts(cryptoWallet);
+                _walletOperationsService.GetAlerts(cryptoWallet);
             }
 
             return Ok();

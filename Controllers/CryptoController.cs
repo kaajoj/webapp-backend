@@ -5,6 +5,8 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json.Linq;
+using VSApi.Data;
+using VSApi.Interfaces;
 using VSApi.Models;
 using VSApi.Services;
 
@@ -14,72 +16,74 @@ namespace VSApi.Controllers
     [Route("api/[controller]")]
     public class CryptoController : ControllerBase
     {
-        private readonly ApiContext _ctx;
-        private string _response;
-        public CryptoController(ApiContext ctx)
+        private readonly ICryptoRepository _cryptoRepository;
+        private readonly ICoinMarketCapApiService _coinMarketCapApiService;
+
+        public CryptoController(ICryptoRepository cryptoRepository, ICoinMarketCapApiService coinMarketCapApiService)
         {
-            _ctx = ctx;
+            _cryptoRepository = cryptoRepository;
+            _coinMarketCapApiService = coinMarketCapApiService;
         }
 
-        // GET: api/crypto
+        // api/crypto
         [HttpGet]
         public IActionResult Get()
         {
-            var data = _ctx.Cryptos.OrderBy(c => c.Rank);
+            var data = _cryptoRepository.GetAll().OrderBy(c => c.Rank);
             return Ok(data);
         }
 
-        // GET api/crypto/5
+        // api/crypto/5
         [HttpGet("{id}", Name = "GetCrypto")]
         public IActionResult Get(int id)
         {
-            var crypto = _ctx.Cryptos.Find(id);
+            var crypto = _cryptoRepository.Get(id);
             return Ok(crypto);
         }
 
+        // api/crypto/getcmcapi
         [HttpGet("GetCmcApi")]
         public async Task<IActionResult> GetCmcApi()
         {
             var cryptos = new List<Crypto>();
-            CoinMarketCapApi coinMarketCapApi = new CoinMarketCapApi();
-            _response = coinMarketCapApi.CmcGet();
-            dynamic jsonObj = JObject.Parse(_response);
+            var cmcResponse = _coinMarketCapApiService.CmcGet();
+            dynamic jsonObj = JObject.Parse(cmcResponse);
             try
             {
                 for (var i = 0; i < 15; i++)
                 {
-                    var cryptoTemp = coinMarketCapApi.CmcJsonParse(jsonObj, i);
+                    var cryptoTemp = _coinMarketCapApiService.CmcJsonParse(jsonObj, i);
                     cryptos.Add(cryptoTemp);
                 }
 
                 foreach(var crypto in cryptos)
                 {
-                    if (!_ctx.Cryptos.Any())
+                    if (!_cryptoRepository.GetAll().Any())
                     {
-                        await _ctx.Cryptos.AddAsync(crypto);
-                        _ = await _ctx.SaveChangesAsync();
+                        await _cryptoRepository.AddAsync(crypto);
                     }
-                    else {
-                        var cryptoToUpdate = _ctx.Cryptos.First(c => c.IdCrypto == crypto.IdCrypto);
-                        cryptoToUpdate.Price = crypto.Price;
-                        cryptoToUpdate.Change24h = crypto.Change24h;
-                        cryptoToUpdate.Change7d = crypto.Change7d;
-                        _ctx.Cryptos.Update(cryptoToUpdate);
-                        _ = await _ctx.SaveChangesAsync();
-                    }                                           
+                    else
+                    {
+                        var cryptoToUpdate  = _cryptoRepository.GetCryptoByIdCrypto(crypto.IdCrypto);
+                        if(cryptoToUpdate != null)
+                        {
+                            cryptoToUpdate.Price = crypto.Price;
+                            cryptoToUpdate.Change24h = crypto.Change24h;
+                            cryptoToUpdate.Change7d = crypto.Change7d;
+                            await _cryptoRepository.UpdateAsync(cryptoToUpdate);
+                        }
+                    }
                 }
-               
             }
             catch (Exception e)
             {
                 Console.WriteLine(e);
             }
 
-            var data = _ctx.Cryptos.OrderBy(c => c.Rank);
-            return Ok(data);
+            return Ok();
         }
 
-        // api/crypto/
+        // api/crypto
         [HttpPost]
         public IActionResult Post([FromBody] Crypto crypto)
         {
@@ -88,14 +92,13 @@ namespace VSApi.Controllers
                 return BadRequest();
             }
 
-            _ctx.Cryptos.Add(crypto);
-            _ctx.SaveChanges();
+            _cryptoRepository.AddAsync(crypto);
 
             return CreatedAtRoute("GetCrypto", new { id = crypto.IdCrypto }, crypto);
         }
 
         // Old function
-        // GET: crypto/edit/1/own/5
+        // crypto/edit/1/own/5
         [HttpGet("Edit/{id}/own/{flag}")]
         public IActionResult Edit(int? id, int flag)
         {
@@ -103,8 +106,7 @@ namespace VSApi.Controllers
             {
                 return NotFound();
             }
-
-            var crypto = _ctx.Cryptos.FirstOrDefault(c => c.Rank == id);
+            var crypto = _cryptoRepository.GetCryptoByRank(id);
 
             if (crypto == null)
             {
@@ -112,10 +114,8 @@ namespace VSApi.Controllers
             }
 
             crypto.OwnFlag = flag;
-            
-            Console.WriteLine(crypto);
-            _ctx.Cryptos.Update(crypto);
-            _ctx.SaveChanges();
+
+            _cryptoRepository.UpdateAsync(crypto);
 
             return Ok(crypto);
         }
