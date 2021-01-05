@@ -78,9 +78,10 @@ namespace VSApi.Controllers
             catch (Exception e)
             {
                 Console.WriteLine(e);
+                throw;
             }
 
-            return Ok();
+            return Ok(cryptos);
         }
 
         // api/crypto
@@ -114,7 +115,6 @@ namespace VSApi.Controllers
             }
 
             crypto.OwnFlag = flag;
-
             _cryptoRepository.UpdateAsync(crypto);
 
             return Ok(crypto);
