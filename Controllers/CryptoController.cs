@@ -56,24 +56,7 @@ namespace VSApi.Controllers
                     cryptos.Add(cryptoTemp);
                 }
 
-                foreach(var crypto in cryptos)
-                {
-                    if (!_cryptoRepository.GetAll().Any())
-                    {
-                        await _cryptoRepository.AddAsync(crypto);
-                    }
-                    else
-                    {
-                        var cryptoToUpdate  = _cryptoRepository.GetCryptoByIdCrypto(crypto.IdCrypto);
-                        if(cryptoToUpdate != null)
-                        {
-                            cryptoToUpdate.Price = crypto.Price;
-                            cryptoToUpdate.Change24h = crypto.Change24h;
-                            cryptoToUpdate.Change7d = crypto.Change7d;
-                            await _cryptoRepository.UpdateAsync(cryptoToUpdate);
-                        }
-                    }
-                }
+                await _coinMarketCapApiService.CmcSaveCryptosData(cryptos);
             }
             catch (Exception e)
             {

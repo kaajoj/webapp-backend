@@ -1,5 +1,8 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Net;
+using System.Threading.Tasks;
 using System.Web;
 using VSApi.Interfaces;
 using VSApi.Models;
@@ -8,7 +11,17 @@ namespace VSApi.Services
 {
     public class CoinMarketCapApiService : ICoinMarketCapApiService
     {
+        private readonly ICryptoRepository _cryptoRepository;
         private const string ApiKey = "f742b5ad-230c-4dfe-b1dc-7fbe4ec51be4";
+
+        public CoinMarketCapApiService(ICryptoRepository cryptoRepository)
+        {
+            _cryptoRepository = cryptoRepository;
+        }
+
+        public CoinMarketCapApiService()
+        {
+        }
 
         public string CmcGet()
         {
@@ -26,6 +39,7 @@ namespace VSApi.Services
             client.Headers.Add("X-CMC_PRO_API_KEY", ApiKey);
             client.Headers.Add("Accepts", "application/json");
             var response = client.DownloadString(url.ToString());
+
             return response;
         }
 
@@ -53,5 +67,26 @@ namespace VSApi.Services
             return cryptoTemp;
         }
 
+        public async Task CmcSaveCryptosData(List<Crypto> cryptos)
+        {
+            foreach (var crypto in cryptos)
+            {
+                if (!_cryptoRepository.GetAll().Any())
+                {
+                    await _cryptoRepository.AddAsync(crypto);
+                }
+                else
+                {
+                    var cryptoToUpdate = _cryptoRepository.GetCryptoByIdCrypto(crypto.IdCrypto);
+                    if (cryptoToUpdate != null)
+                    {
+                        cryptoToUpdate.Price = crypto.Price;
+                        cryptoToUpdate.Change24h = crypto.Change24h;
+                        cryptoToUpdate.Change7d = crypto.Change7d;
+                        await _cryptoRepository.UpdateAsync(cryptoToUpdate);
+                    }
+                }
+            }
+        }
     }
 }
