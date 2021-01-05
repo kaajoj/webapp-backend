@@ -17,11 +17,13 @@ namespace VSApi.Controllers
     public class CryptoController : ControllerBase
     {
         private readonly ICryptoRepository _cryptoRepository;
+        private readonly ICryptoService _cryptoService;
         private readonly ICoinMarketCapApiService _coinMarketCapApiService;
 
-        public CryptoController(ICryptoRepository cryptoRepository, ICoinMarketCapApiService coinMarketCapApiService)
+        public CryptoController(ICryptoRepository cryptoRepository, ICryptoService cryptoService, ICoinMarketCapApiService coinMarketCapApiService)
         {
             _cryptoRepository = cryptoRepository;
+            _cryptoService = cryptoService;
             _coinMarketCapApiService = coinMarketCapApiService;
         }
 
@@ -29,8 +31,16 @@ namespace VSApi.Controllers
         [HttpGet]
         public IActionResult Get()
         {
-            var data = _cryptoRepository.GetAll().OrderBy(c => c.Rank);
-            return Ok(data);
+            try
+            {
+                var data = _cryptoService.GetAll();
+                return Ok(data);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
         }
 
         // api/crypto/5
