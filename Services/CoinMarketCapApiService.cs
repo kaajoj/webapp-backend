@@ -12,21 +12,6 @@ namespace VSApi.Services
 
         public string CmcGet()
         {
-            try
-            {
-                var response = MakeApiCall();
-                return response;
-
-            }
-            catch (WebException e)
-            {
-                Console.WriteLine(e.Message);
-                throw;
-            }
-        }
-
-        public string MakeApiCall()
-        {
             var url = new UriBuilder("https://pro-api.coinmarketcap.com/v1/cryptocurrency/listings/latest");
 
             var queryString = HttpUtility.ParseQueryString(string.Empty);
@@ -40,7 +25,8 @@ namespace VSApi.Services
             var client = new WebClient();
             client.Headers.Add("X-CMC_PRO_API_KEY", ApiKey);
             client.Headers.Add("Accepts", "application/json");
-            return client.DownloadString(url.ToString());
+            var response = client.DownloadString(url.ToString());
+            return response;
         }
 
         public Crypto CmcJsonParse(dynamic jsonObj, int i)
