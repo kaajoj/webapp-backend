@@ -47,7 +47,7 @@ namespace VSApi.Controllers
         [HttpGet("{id}", Name = "GetCrypto")]
         public IActionResult Get(int id)
         {
-            var crypto = _cryptoRepository.Get(id);
+            var crypto = _cryptoService.Get(id);
             return Ok(crypto);
         }
 

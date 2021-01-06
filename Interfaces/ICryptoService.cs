@@ -9,5 +9,6 @@ namespace VSApi.Interfaces
     public interface ICryptoService
     {
         IEnumerable<Crypto> GetAll();
+        Crypto Get(int id);
     }
 }

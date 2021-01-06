@@ -19,5 +19,10 @@ namespace VSApi.Services
         {
             return _cryptoRepository.GetAll().OrderBy(c => c.Rank);
         }
+
+        public Crypto Get(int id)
+        {
+            return _cryptoRepository.Get(id);
+        }
     }
 }
