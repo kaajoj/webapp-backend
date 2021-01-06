@@ -92,16 +92,17 @@ namespace VSApi.Controllers
             return CreatedAtRoute("GetCrypto", new { id = crypto.IdCrypto }, crypto);
         }
 
-        // Old function
+        // Old function - remove
         // crypto/edit/1/own/5
         [HttpGet("Edit/{id}/own/{flag}")]
-        public IActionResult Edit(int? id, int flag)
+        public async Task<IActionResult> Edit(int? rank, int flag)
         {
-            if (id == null)
+            if (rank == null)
             {
                 return NotFound();
             }
-            var crypto = _cryptoRepository.GetCryptoByRank(id);
+
+            var crypto = _cryptoRepository.GetCryptoByRank(rank);
 
             if (crypto == null)
             {
@@ -109,7 +110,7 @@ namespace VSApi.Controllers
             }
 
             crypto.OwnFlag = flag;
-            _cryptoRepository.UpdateAsync(crypto);
+            await _cryptoRepository.UpdateAsync(crypto);
 
             return Ok(crypto);
         }
