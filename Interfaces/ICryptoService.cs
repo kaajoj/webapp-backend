@@ -11,6 +11,7 @@ namespace VSApi.Interfaces
         IEnumerable<Crypto> GetAll();
         Crypto Get(int id);
         Task<Crypto> AddAsync(Crypto crypto);
+        Task<Crypto> UpdateAsync(Crypto crypto);
         Task<Crypto> GetCryptoByRank(int? rank);
     }
 }

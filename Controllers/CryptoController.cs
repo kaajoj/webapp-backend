@@ -110,7 +110,7 @@ namespace VSApi.Controllers
             }
 
             crypto.OwnFlag = flag;
-            await _cryptoRepository.UpdateAsync(crypto);
+            await _cryptoService.UpdateAsync(crypto);
 
             return Ok(crypto);
         }
