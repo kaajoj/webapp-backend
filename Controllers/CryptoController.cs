@@ -56,10 +56,11 @@ namespace VSApi.Controllers
         public async Task<IActionResult> GetCmcApi()
         {
             var cryptos = new List<Crypto>();
-            var cmcResponse = _coinMarketCapApiService.CmcGet();
-            dynamic jsonObj = JObject.Parse(cmcResponse);
             try
             {
+                var cmcResponse = _coinMarketCapApiService.CmcGet();
+                dynamic jsonObj = JObject.Parse(cmcResponse);
+
                 for (var i = 0; i < 15; i++)
                 {
                     var cryptoTemp = _coinMarketCapApiService.CmcJsonParse(jsonObj, i);
@@ -79,14 +80,14 @@ namespace VSApi.Controllers
 
         // api/crypto
         [HttpPost]
-        public IActionResult Post([FromBody] Crypto crypto)
+        public async Task<IActionResult> Post([FromBody] Crypto crypto)
         {
             if (crypto == null)
             {
                 return BadRequest();
             }
 
-            _cryptoRepository.AddAsync(crypto);
+            await _cryptoRepository.AddAsync(crypto);
 
             return CreatedAtRoute("GetCrypto", new { id = crypto.IdCrypto }, crypto);
         }
