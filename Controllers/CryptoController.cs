@@ -16,13 +16,11 @@ namespace VSApi.Controllers
     [Route("api/[controller]")]
     public class CryptoController : ControllerBase
     {
-        private readonly ICryptoRepository _cryptoRepository;
         private readonly ICryptoService _cryptoService;
         private readonly ICoinMarketCapApiService _coinMarketCapApiService;
 
-        public CryptoController(ICryptoRepository cryptoRepository, ICryptoService cryptoService, ICoinMarketCapApiService coinMarketCapApiService)
+        public CryptoController(ICryptoService cryptoService, ICoinMarketCapApiService coinMarketCapApiService)
         {
-            _cryptoRepository = cryptoRepository;
             _cryptoService = cryptoService;
             _coinMarketCapApiService = coinMarketCapApiService;
         }
