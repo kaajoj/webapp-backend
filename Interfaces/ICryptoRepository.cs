@@ -9,6 +9,6 @@ namespace VSApi.Interfaces
     public interface ICryptoRepository : IRepository<Crypto>
     {
         Crypto GetCryptoByIdCrypto(int idCrypto);
-        Crypto GetCryptoByRank(int? rank);
+        Task<Crypto> GetCryptoByRank(int? rank);
     }
 }

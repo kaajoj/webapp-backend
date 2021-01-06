@@ -19,9 +19,9 @@ namespace VSApi.Data
             return apiContext.Cryptos.FirstOrDefault(c => c.IdCrypto == idCrypto);
         }
 
-        public Crypto GetCryptoByRank(int? rank)
+        public async Task<Crypto> GetCryptoByRank(int? rank)
         {
-            return apiContext.Cryptos.FirstOrDefault(c => c.Rank == rank);
+            return await apiContext.Cryptos.FirstOrDefaultAsync(c => c.Rank == rank);
         }
     }
 }
