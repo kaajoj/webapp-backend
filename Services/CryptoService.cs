@@ -29,5 +29,10 @@ namespace VSApi.Services
         {
             return await _cryptoRepository.AddAsync(crypto);
         }
+
+        public async Task<Crypto> GetCryptoByRank(int? rank)
+        {
+            return await _cryptoRepository.GetCryptoByRank(rank);
+        }
     }
 }

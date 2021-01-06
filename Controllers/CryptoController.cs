@@ -102,7 +102,7 @@ namespace VSApi.Controllers
                 return NotFound();
             }
 
-            var crypto = await _cryptoRepository.GetCryptoByRank(rank);
+            var crypto = await _cryptoService.GetCryptoByRank(rank);
 
             if (crypto == null)
             {
