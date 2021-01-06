@@ -24,5 +24,10 @@ namespace VSApi.Services
         {
             return _cryptoRepository.Get(id);
         }
+
+        public async Task<Crypto> AddAsync(Crypto crypto)
+        {
+            return await _cryptoRepository.AddAsync(crypto);
+        }
     }
 }

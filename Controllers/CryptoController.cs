@@ -87,7 +87,7 @@ namespace VSApi.Controllers
                 return BadRequest();
             }
 
-            await _cryptoRepository.AddAsync(crypto);
+            await _cryptoService.AddAsync(crypto);
 
             return CreatedAtRoute("GetCrypto", new { id = crypto.IdCrypto }, crypto);
         }
