@@ -57,11 +57,10 @@ namespace VSApi.Controllers
             try
             {
                 var cmcResponse = _coinMarketCapApiService.CmcGet();
-                dynamic jsonObj = JObject.Parse(cmcResponse);
 
                 for (var i = 0; i < 15; i++)
                 {
-                    var cryptoTemp = _coinMarketCapApiService.CmcJsonParse(jsonObj, i);
+                    var cryptoTemp = _coinMarketCapApiService.CmcJsonParse(cmcResponse, i);
                     cryptos.Add(cryptoTemp);
                 }
 

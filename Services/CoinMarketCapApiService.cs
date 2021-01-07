@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using System.Web;
+using Newtonsoft.Json.Linq;
 using VSApi.Interfaces;
 using VSApi.Models;
 
@@ -43,8 +44,10 @@ namespace VSApi.Services
             return response;
         }
 
-        public Crypto CmcJsonParse(dynamic jsonObj, int i)
+        public Crypto CmcJsonParse(string cmcResponse, int i)
         {
+            dynamic jsonObj = JObject.Parse(cmcResponse);
+
             var cryptoTemp = new Crypto();
             // checkId = jsonObj["data"]["" + id + ""].ToString();
             string cryptoId = jsonObj.SelectToken("$.data[" + i + "].id").ToString();
@@ -71,7 +74,7 @@ namespace VSApi.Services
         {
             foreach (var crypto in cryptos)
             {
-                if (!_cryptoRepository.GetAll().Any())
+                if (!_cryptoRepository.GetAll().Any())  // refactor
                 {
                     await _cryptoRepository.AddAsync(crypto);
                 }

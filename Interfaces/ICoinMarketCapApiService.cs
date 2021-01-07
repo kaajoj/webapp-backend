@@ -10,7 +10,7 @@ namespace VSApi.Interfaces
     public interface ICoinMarketCapApiService
     {
         string CmcGet();
-        Crypto CmcJsonParse(dynamic jsonObj, int i);
+        Crypto CmcJsonParse(string cmcResponsej, int i);
         Task CmcSaveCryptosData(List<Crypto> cryptos);
     }
 }
