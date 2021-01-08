@@ -8,6 +8,7 @@ namespace VSApi.Interfaces
 {
     public interface ICryptoRepository : IRepository<Crypto>
     {
+        Task AddRange(List<Crypto> cryptos);
         Crypto GetCryptoByIdCrypto(int idCrypto);
         Task<Crypto> GetCryptoByRank(int? rank);
     }

@@ -72,13 +72,13 @@ namespace VSApi.Services
 
         public async Task CmcSaveCryptosData(List<Crypto> cryptos)
         {
-            foreach (var crypto in cryptos)
+            if (!_cryptoRepository.GetAll().Any())
             {
-                if (!_cryptoRepository.GetAll().Any())  // refactor
-                {
-                    await _cryptoRepository.AddAsync(crypto);
-                }
-                else
+                await _cryptoRepository.AddRange(cryptos);
+            }
+            else
+            {
+                foreach (var crypto in cryptos)
                 {
                     var cryptoToUpdate = _cryptoRepository.GetCryptoByIdCrypto(crypto.IdCrypto);
                     if (cryptoToUpdate != null)
