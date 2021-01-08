@@ -10,7 +10,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NUnitTestApi", "..\NUnitTes
 		{1350E744-4512-4027-9C02-1412A5159BE9} = {1350E744-4512-4027-9C02-1412A5159BE9}
 	EndProjectSection
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VSapi.Tests", "..\VSapi.Tests\VSapi.Tests.csproj", "{AB291CAF-F2C4-4E57-AE9F-E1D54D70F7E1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VSApi.Tests", "..\VSapi.Tests\VSApi.Tests.csproj", "{AB291CAF-F2C4-4E57-AE9F-E1D54D70F7E1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

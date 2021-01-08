@@ -6,10 +6,12 @@ using VSApi.Models;
 
 namespace VSApi.Interfaces
 {
-    public interface ICryptoRepository : IRepository<Crypto>
+    public interface ICryptoService
     {
-        Task AddRange(List<Crypto> cryptos);
-        Crypto GetCryptoByIdCrypto(int idCrypto);
+        IEnumerable<Crypto> GetAll();
+        Crypto Get(int id);
+        Task<Crypto> AddAsync(Crypto crypto);
+        Task<Crypto> UpdateAsync(Crypto crypto);
         Task<Crypto> GetCryptoByRank(int? rank);
     }
 }

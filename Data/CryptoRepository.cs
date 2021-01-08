@@ -14,14 +14,20 @@ namespace VSApi.Data
 
         public ApiContext apiContext => _databaseContext as ApiContext;
 
+        public async Task AddRange(List<Crypto> cryptos)
+        {
+            await apiContext.Cryptos.AddRangeAsync(cryptos);
+            await _databaseContext.SaveChangesAsync();
+        }
+
         public Crypto GetCryptoByIdCrypto(int idCrypto)
         {
             return apiContext.Cryptos.FirstOrDefault(c => c.IdCrypto == idCrypto);
         }
 
-        public Crypto GetCryptoByRank(int? rank)
+        public async Task<Crypto> GetCryptoByRank(int? rank)
         {
-            return apiContext.Cryptos.FirstOrDefault(c => c.Rank == rank);
+            return await apiContext.Cryptos.FirstOrDefaultAsync(c => c.Rank == rank);
         }
     }
 }

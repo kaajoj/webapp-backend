@@ -16,12 +16,12 @@ namespace VSApi.Controllers
     [Route("api/[controller]")]
     public class CryptoController : ControllerBase
     {
-        private readonly ICryptoRepository _cryptoRepository;
+        private readonly ICryptoService _cryptoService;
         private readonly ICoinMarketCapApiService _coinMarketCapApiService;
 
-        public CryptoController(ICryptoRepository cryptoRepository, ICoinMarketCapApiService coinMarketCapApiService)
+        public CryptoController(ICryptoService cryptoService, ICoinMarketCapApiService coinMarketCapApiService)
         {
-            _cryptoRepository = cryptoRepository;
+            _cryptoService = cryptoService;
             _coinMarketCapApiService = coinMarketCapApiService;
         }
 
@@ -29,15 +29,23 @@ namespace VSApi.Controllers
         [HttpGet]
         public IActionResult Get()
         {
-            var data = _cryptoRepository.GetAll().OrderBy(c => c.Rank);
-            return Ok(data);
+            try
+            {
+                var data = _cryptoService.GetAll();
+                return Ok(data);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
         }
 
         // api/crypto/5
         [HttpGet("{id}", Name = "GetCrypto")]
         public IActionResult Get(int id)
         {
-            var crypto = _cryptoRepository.Get(id);
+            var crypto = _cryptoService.Get(id);
             return Ok(crypto);
         }
 
@@ -46,67 +54,52 @@ namespace VSApi.Controllers
         public async Task<IActionResult> GetCmcApi()
         {
             var cryptos = new List<Crypto>();
-            var cmcResponse = _coinMarketCapApiService.CmcGet();
-            dynamic jsonObj = JObject.Parse(cmcResponse);
             try
             {
+                var cmcResponse = _coinMarketCapApiService.CmcGet();
+
                 for (var i = 0; i < 15; i++)
                 {
-                    var cryptoTemp = _coinMarketCapApiService.CmcJsonParse(jsonObj, i);
+                    var cryptoTemp = _coinMarketCapApiService.CmcJsonParse(cmcResponse, i);
                     cryptos.Add(cryptoTemp);
                 }
 
-                foreach(var crypto in cryptos)
-                {
-                    if (!_cryptoRepository.GetAll().Any())
-                    {
-                        await _cryptoRepository.AddAsync(crypto);
-                    }
-                    else
-                    {
-                        var cryptoToUpdate  = _cryptoRepository.GetCryptoByIdCrypto(crypto.IdCrypto);
-                        if(cryptoToUpdate != null)
-                        {
-                            cryptoToUpdate.Price = crypto.Price;
-                            cryptoToUpdate.Change24h = crypto.Change24h;
-                            cryptoToUpdate.Change7d = crypto.Change7d;
-                            await _cryptoRepository.UpdateAsync(cryptoToUpdate);
-                        }
-                    }
-                }
+                await _coinMarketCapApiService.CmcSaveCryptosData(cryptos);
             }
             catch (Exception e)
             {
                 Console.WriteLine(e);
+                throw;
             }
 
-            return Ok();
+            return Ok(cryptos);
         }
 
         // api/crypto
         [HttpPost]
-        public IActionResult Post([FromBody] Crypto crypto)
+        public async Task<IActionResult> Post([FromBody] Crypto crypto)
         {
             if (crypto == null)
             {
                 return BadRequest();
             }
 
-            _cryptoRepository.AddAsync(crypto);
+            await _cryptoService.AddAsync(crypto);
 
             return CreatedAtRoute("GetCrypto", new { id = crypto.IdCrypto }, crypto);
         }
 
-        // Old function
+        // Old function - remove
         // crypto/edit/1/own/5
         [HttpGet("Edit/{id}/own/{flag}")]
-        public IActionResult Edit(int? id, int flag)
+        public async Task<IActionResult> Edit(int? rank, int flag)
         {
-            if (id == null)
+            if (rank == null)
             {
                 return NotFound();
             }
-            var crypto = _cryptoRepository.GetCryptoByRank(id);
+
+            var crypto = await _cryptoService.GetCryptoByRank(rank);
 
             if (crypto == null)
             {
@@ -114,8 +107,7 @@ namespace VSApi.Controllers
             }
 
             crypto.OwnFlag = flag;
-
-            _cryptoRepository.UpdateAsync(crypto);
+            await _cryptoService.UpdateAsync(crypto);
 
             return Ok(crypto);
         }
