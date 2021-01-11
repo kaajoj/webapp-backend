@@ -40,7 +40,7 @@ namespace VSApi.Controllers
         }
 
         // api/wallet/5
-        [HttpGet("{id}", Name = "GetWallet")]
+        [HttpGet("Get/{id}")]
         public IActionResult Get(int id)
         {
             var crypto = _walletRepository.Get(id);
