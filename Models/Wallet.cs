@@ -28,6 +28,7 @@ namespace VSApi.Models
         public string AlertDown { get; set; }       
         public string Change { get; set; }
 
+        public string UserId { get; set; }
         public ApplicationUser User { get; set; }
         public Crypto Crypto { get; set; }
     }
