@@ -1,3 +1,5 @@
+using Org.BouncyCastle.Utilities.IO.Pem;
+
 namespace VSApi.Models
 {
     public class Wallet
@@ -24,7 +26,9 @@ namespace VSApi.Models
 
         public string AlertUp { get; set; }
         public string AlertDown { get; set; }       
-        public string Change { get; set; }      
-        
+        public string Change { get; set; }
+
+        public ApplicationUser User { get; set; }
+        public Crypto Crypto { get; set; }
     }
 }
