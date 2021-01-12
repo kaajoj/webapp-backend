@@ -47,7 +47,7 @@ namespace VSApi.Controllers
             return Ok(crypto);
         }
 
-        [HttpGet("GetWalletByUser/{id}")]
+        [HttpGet("GetWalletByUserId/{id}")]
         public IActionResult GetWalletByUser(string id)
         {
             var crypto = _walletRepository.GetAll().Where(u => u.UserId == id);
