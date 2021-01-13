@@ -22,8 +22,8 @@ namespace VSApi.Controllers
         private readonly IWalletOperationsService _walletOperationsService;
 
         public WalletController(
-            IWalletRepository walletRepository, 
-            ICryptoRepository cryptoRepository, 
+            IWalletRepository walletRepository,
+            ICryptoRepository cryptoRepository,
             IWalletOperationsService walletOperationsService)
         {
             _walletRepository = walletRepository;
@@ -56,15 +56,23 @@ namespace VSApi.Controllers
 
         // api/wallet
         [HttpPost]
-        public IActionResult Post([FromBody] Wallet wallet)
+        public async Task<IActionResult> Post([FromBody] Wallet wallet)
         {
-            if (wallet == null)
+            try
             {
-                return BadRequest();
-            }
+                if (wallet == null)
+                {
+                    return BadRequest();
+                }
 
-            _walletRepository.AddAsync(wallet);
-            return CreatedAtRoute("GetWallet", new { id = wallet.Id }, wallet);
+                await _walletRepository.AddAsync(wallet);
+                return Ok(wallet);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
         }
 
 
