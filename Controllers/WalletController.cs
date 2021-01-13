@@ -58,13 +58,18 @@ namespace VSApi.Controllers
         [HttpPost]
         public async Task<IActionResult> Post([FromBody] Wallet wallet)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest();
+            }
+
+            if (wallet == null)
+            {
+                return NotFound();
+            }
+
             try
             {
-                if (wallet == null)
-                {
-                    return BadRequest();
-                }
-
                 await _walletRepository.AddAsync(wallet);
                 return Ok(wallet);
             }
