@@ -28,14 +28,22 @@ namespace VSApi.Data
 
         public async Task<TEntity> AddAsync(TEntity entity)
         {
-            if (entity == null)
+            try
             {
-                throw new ArgumentNullException($"{nameof(AddAsync)} entity must not be null");
-            }
-            await _databaseContext.Set<TEntity>().AddAsync(entity);
-            await _databaseContext.SaveChangesAsync();
+                if (entity == null)
+                {
+                    throw new ArgumentNullException($"{nameof(AddAsync)} entity must not be null");
+                }
+                await _databaseContext.Set<TEntity>().AddAsync(entity);
+                await _databaseContext.SaveChangesAsync();
 
-            return entity;
+                return entity;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
         }
 
         public async Task<TEntity> UpdateAsync(TEntity entity)
