@@ -65,7 +65,6 @@ namespace VSApi.Services
             cryptoTemp.Price = cryptoPrice;
             cryptoTemp.Change24h = cryptoChange24H;
             cryptoTemp.Change7d = cryptoChange7D;
-            cryptoTemp.OwnFlag = 0;
 
             return cryptoTemp;
         }
