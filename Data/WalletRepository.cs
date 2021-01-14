@@ -12,11 +12,11 @@ namespace VSApi.Data
     {
         public WalletRepository(ApiContext context) : base(context) { }
 
-        public ApiContext apiContext => _databaseContext as ApiContext;
+        public ApiContext ApiContext => _databaseContext as ApiContext;
 
         public Wallet GetWalletByRank(int? rank)
         {
-            return apiContext.Wallet.FirstOrDefault(c => c.Rank == rank);
+            return ApiContext.Wallet.FirstOrDefault(c => c.Rank == rank);
         }
     }
 }

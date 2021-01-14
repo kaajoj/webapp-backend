@@ -12,22 +12,22 @@ namespace VSApi.Data
     {
         public CryptoRepository(ApiContext context) : base(context) { }
 
-        public ApiContext apiContext => _databaseContext as ApiContext;
+        public ApiContext ApiContext => _databaseContext as ApiContext;
 
         public async Task AddRange(List<Crypto> cryptos)
         {
-            await apiContext.Cryptos.AddRangeAsync(cryptos);
+            await ApiContext.Cryptos.AddRangeAsync(cryptos);
             await _databaseContext.SaveChangesAsync();
         }
 
         public Crypto GetCryptoByIdCrypto(int idCrypto)
         {
-            return apiContext.Cryptos.FirstOrDefault(c => c.IdCrypto == idCrypto);
+            return ApiContext.Cryptos.FirstOrDefault(c => c.IdCrypto == idCrypto);
         }
 
         public async Task<Crypto> GetCryptoByRank(int? rank)
         {
-            return await apiContext.Cryptos.FirstOrDefaultAsync(c => c.Rank == rank);
+            return await ApiContext.Cryptos.FirstOrDefaultAsync(c => c.Rank == rank);
         }
     }
 }
