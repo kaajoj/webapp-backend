@@ -1,4 +1,5 @@
 using System;
+using System.Threading.Tasks;
 using VSApi.Interfaces;
 using VSApi.Models;
 
@@ -24,19 +25,19 @@ namespace VSApi.Services
             return crypto.Change;
         }
 
-        public void GetAlerts(Wallet crypto)
+        public async Task GetAlerts(Wallet crypto)
         {
             if (Convert.ToDouble(crypto.Change) < -Convert.ToDouble(crypto.AlertDown))
             {
                 var buyStr = "Price is below your alert(-" + crypto.AlertDown + "%)  -  buy  " + crypto.Name + "(" + crypto.Symbol + ")" + "";
                 var message = _emailEmailService.PrepareMessage(buyStr, crypto.Price, crypto.OldPrice, crypto.Change);
-                _emailEmailService.SendMessage(message);
+                await _emailEmailService.SendMessage(message);
             }
             if (Convert.ToDouble(crypto.Change) > Convert.ToDouble(crypto.AlertUp))
             {
                 var sellStr = "Price is above your alert(" + crypto.AlertUp + "%)  -  sell  " + crypto.Name + "(" + crypto.Symbol + ")" + "";
                 var message = _emailEmailService.PrepareMessage(sellStr, crypto.Price, crypto.OldPrice, crypto.Change);
-                _emailEmailService.SendMessage(message);
+                await _emailEmailService.SendMessage(message);
             }
         }
 

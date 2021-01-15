@@ -34,20 +34,15 @@ namespace VSApi.Services
             return message;
         }
 
-        public void SendMessage(MimeMessage message)
+        public async Task SendMessage(MimeMessage message)
         {
-            var client = MessageConnectionData();
-            client.Send(message);               // using
-            client.Disconnect(true);
-            client.Dispose();
-        }
-
-        private static IMailTransport MessageConnectionData()
-        {
-            var client = new SmtpClient();
-            client.Connect("smtp.gmail.com", 587, MailKit.Security.SecureSocketOptions.StartTls);
-            client.Authenticate("karol.testm@gmail.com", "ZJQVkPD6Ttest");
-            return client;
+            using (var client = new SmtpClient())
+            {
+                await client.ConnectAsync("smtp.gmail.com", 587, MailKit.Security.SecureSocketOptions.StartTls);
+                await client.AuthenticateAsync("karol.testm@gmail.com", "ZJQVkPD6Ttest");
+                await client.SendAsync(message);
+                await client.DisconnectAsync(true);
+            }
         }
     }
 }

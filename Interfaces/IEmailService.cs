@@ -9,6 +9,6 @@ namespace VSApi.Interfaces
     public interface IEmailService
     {
         MimeMessage PrepareMessage(string alertStr, string price, string oldPrice, string change);
-        void SendMessage(MimeMessage message);
+        Task SendMessage(MimeMessage message);
     }
 }
