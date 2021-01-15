@@ -22,10 +22,6 @@ namespace VSApi.Services
             _configuration = configuration;
         }
 
-        public CoinMarketCapApiService()
-        {
-        }
-
         public string CmcGet()
         {
             var apiKey = _configuration["CMCApiKey"];
