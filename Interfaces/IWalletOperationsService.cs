@@ -1,4 +1,5 @@
 using System;
+using System.Threading.Tasks;
 using VSApi.Models;
 
 namespace VSApi.Interfaces
@@ -7,6 +8,6 @@ namespace VSApi.Interfaces
     {
         Wallet CalculateSum(Wallet crypto);
         string CalculateAlerts(Wallet crypto);
-        void GetAlerts(Wallet crypto);
+        Task GetAlerts(Wallet crypto);
     }
 }

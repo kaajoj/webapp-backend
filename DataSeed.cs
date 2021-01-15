@@ -136,7 +136,6 @@ namespace VSApi
         //             Price = "4000",
         //             Change24h = "30",
         //             Change7d = "4",
-        //             ownFlag = 0
         //         },
         //         new Crypto {
         //             idCrypto = 8001,
@@ -146,7 +145,6 @@ namespace VSApi
         //             Price = "200",
         //             Change24h = "5",
         //             Change7d = "10",
-        //             ownFlag = 0
         //         },
         //         new Crypto {
         //             idCrypto = 8002,
@@ -156,7 +154,6 @@ namespace VSApi
         //             Price = "40",
         //             Change24h = "-2",
         //             Change7d = "-10",
-        //             ownFlag = 0
         //         }
         //
         //     };

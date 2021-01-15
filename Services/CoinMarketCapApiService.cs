@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using System.Web;
+using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json.Linq;
 using VSApi.Interfaces;
 using VSApi.Models;
@@ -13,19 +14,17 @@ namespace VSApi.Services
     public class CoinMarketCapApiService : ICoinMarketCapApiService
     {
         private readonly ICryptoRepository _cryptoRepository;
-        private const string ApiKey = "f742b5ad-230c-4dfe-b1dc-7fbe4ec51be4";
+        private readonly IConfiguration _configuration;
 
-        public CoinMarketCapApiService(ICryptoRepository cryptoRepository)
+        public CoinMarketCapApiService(ICryptoRepository cryptoRepository, IConfiguration configuration)
         {
             _cryptoRepository = cryptoRepository;
-        }
-
-        public CoinMarketCapApiService()
-        {
+            _configuration = configuration;
         }
 
         public string CmcGet()
         {
+            var apiKey = _configuration["CMCApiKey"];
             var url = new UriBuilder("https://pro-api.coinmarketcap.com/v1/cryptocurrency/listings/latest");
 
             var queryString = HttpUtility.ParseQueryString(string.Empty);
@@ -37,7 +36,7 @@ namespace VSApi.Services
             url.Query = queryString.ToString();
 
             var client = new WebClient();
-            client.Headers.Add("X-CMC_PRO_API_KEY", ApiKey);
+            client.Headers.Add("X-CMC_PRO_API_KEY", apiKey);
             client.Headers.Add("Accepts", "application/json");
             var response = client.DownloadString(url.ToString());
 
@@ -65,7 +64,6 @@ namespace VSApi.Services
             cryptoTemp.Price = cryptoPrice;
             cryptoTemp.Change24h = cryptoChange24H;
             cryptoTemp.Change7d = cryptoChange7D;
-            cryptoTemp.OwnFlag = 0;
 
             return cryptoTemp;
         }

@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using VSApi.Data;
 
 namespace VSApi.Migrations
 {
     [DbContext(typeof(ApiContext))]
-    partial class ApiContextModelSnapshot : ModelSnapshot
+    [Migration("20210111112741_AddUserIdToWallet")]
+    partial class AddUserIdToWallet
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -320,6 +322,9 @@ namespace VSApi.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("OwnFlag")
+                        .HasColumnType("int");
+
                     b.Property<string>("Price")
                         .HasColumnType("nvarchar(max)");
 
@@ -367,6 +372,9 @@ namespace VSApi.Migrations
 
                     b.Property<string>("OldPrice")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("OwnFlag")
+                        .HasColumnType("int");
 
                     b.Property<string>("Price")
                         .HasColumnType("nvarchar(max)");
