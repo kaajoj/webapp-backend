@@ -85,6 +85,7 @@ namespace VSApi
             services.AddScoped<ICryptoService, CryptoService>();
             services.AddScoped<ICoinMarketCapApiService, CoinMarketCapApiService>();
             services.AddScoped<IWalletOperationsService, WalletOperationsService>();
+            services.AddScoped<IEmailService, EmailService>();
 
             services.AddScoped<ICryptoRepository, CryptoRepository>();
             services.AddScoped<IWalletRepository, WalletRepository>();
