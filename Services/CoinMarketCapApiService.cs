@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using System.Web;
+using IdentityServer4.EntityFramework.Entities;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json.Linq;
 using VSApi.Interfaces;
@@ -80,11 +81,15 @@ namespace VSApi.Services
                 {
                     var cryptoToUpdate = _cryptoRepository.GetCryptoByIdCrypto(crypto.IdCrypto);
                     if (cryptoToUpdate != null)
-                    {
+                    {   
                         cryptoToUpdate.Price = crypto.Price;
                         cryptoToUpdate.Change24h = crypto.Change24h;
                         cryptoToUpdate.Change7d = crypto.Change7d;
                         await _cryptoRepository.UpdateAsync(cryptoToUpdate);
+                    }
+                    else
+                    {
+                        await _cryptoRepository.AddAsync(crypto);
                     }
                 }
             }
