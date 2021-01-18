@@ -11,8 +11,8 @@ using VSApi.Services;
 
 namespace VSApi.Controllers
 {
-    // [Authorize]
     // [Authorize(Roles = "Administrator")]
+    [Authorize]
     [ApiController]
     [Route("api/[controller]")]
     public class WalletController : ControllerBase
@@ -47,6 +47,7 @@ namespace VSApi.Controllers
             return Ok(crypto);
         }
 
+        [AllowAnonymous]
         [HttpGet("GetWalletByUserId/{id}")]
         public IActionResult GetWalletByUser(string id)
         {
@@ -55,6 +56,7 @@ namespace VSApi.Controllers
         }
 
         // api/wallet
+        [AllowAnonymous]
         [HttpPost]
         public async Task<IActionResult> Post([FromBody] Wallet wallet)
         {
@@ -166,6 +168,7 @@ namespace VSApi.Controllers
         }
 
         // wallet/edit/prices
+        [AllowAnonymous]
         [HttpGet("Edit/prices")]
         public IActionResult UpdatePrices()
         {
