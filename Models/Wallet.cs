@@ -20,6 +20,7 @@ namespace VSApi.Models
         public string Change { get; set; }
 
         public string UserId { get; set; }
+        public int CryptoId { get; set; }
         public ApplicationUser User { get; set; }
         public Crypto Crypto { get; set; }
     }
