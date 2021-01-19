@@ -11,19 +11,35 @@ namespace VSApi.Data
     {
         protected readonly DbContext _databaseContext;
 
-        public Repository(DbContext context)
+        protected Repository(DbContext context)
         {
             _databaseContext = context;
         }
 
         public IEnumerable<TEntity> GetAll()
         {
-            return _databaseContext.Set<TEntity>().ToList();
+            try
+            {
+                return _databaseContext.Set<TEntity>().ToList();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
         }
 
         public TEntity Get(int id)
         {
-            return _databaseContext.Set<TEntity>().Find(id);
+            try
+            {
+                return _databaseContext.Set<TEntity>().Find(id);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
         }
 
         public async Task<TEntity> AddAsync(TEntity entity)
@@ -48,24 +64,40 @@ namespace VSApi.Data
 
         public async Task<TEntity> UpdateAsync(TEntity entity)
         {
-            if (entity == null)
+            try
             {
-                throw new ArgumentNullException($"{nameof(UpdateAsync)} entity must not be null");
-            }
-            _databaseContext.Set<TEntity>().Update(entity);
-            await _databaseContext.SaveChangesAsync();
+                if (entity == null)
+                {
+                    throw new ArgumentNullException($"{nameof(UpdateAsync)} entity must not be null");
+                }
+                _databaseContext.Set<TEntity>().Update(entity);
+                await _databaseContext.SaveChangesAsync();
 
-            return entity;
+                return entity;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
         }
 
         public async Task RemoveAsync(TEntity entity)
         {
-            if (entity == null)
+            try
             {
-                throw new ArgumentNullException($"{nameof(RemoveAsync)} entity must not be null");
+                if (entity == null)
+                {
+                    throw new ArgumentNullException($"{nameof(RemoveAsync)} entity must not be null");
+                }
+                _databaseContext.Set<TEntity>().Remove(entity);
+                await _databaseContext.SaveChangesAsync();
             }
-            _databaseContext.Set<TEntity>().Remove(entity);
-            await _databaseContext.SaveChangesAsync();
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
         }
     }
 }
