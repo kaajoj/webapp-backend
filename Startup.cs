@@ -22,43 +22,43 @@ namespace VSApi
         {
             Configuration = configuration;
 
-            var aTimer = new Timer
-            {
-                Interval = 1000 * 30 * 30
-            };
-            aTimer.Elapsed += OnTimedEventAPI;
-            aTimer.AutoReset = true;
-            aTimer.Enabled = true;
-
-            var aTimer2 = new Timer
-            {
-                Interval = (1000 * 30 * 30) + 10000
-            };
-            aTimer2.Elapsed += OnTimedEventEmails;
-            aTimer2.AutoReset = true;
-            aTimer2.Enabled = true;
+            // var aTimer = new Timer
+            // {
+            //     Interval = 1000 * 30 * 30
+            // };
+            // aTimer.Elapsed += OnTimedEventAPI;
+            // aTimer.AutoReset = true;
+            // aTimer.Enabled = true;
+            //
+            // var aTimer2 = new Timer
+            // {
+            //     Interval = (1000 * 30 * 30) + 10000
+            // };
+            // aTimer2.Elapsed += OnTimedEventEmails;
+            // aTimer2.AutoReset = true;
+            // aTimer2.Enabled = true;
         }
 
-        private static void OnTimedEventAPI(Object source, ElapsedEventArgs e)
-        {
-            var urlUpdateApi = new UriBuilder("https://localhost:5001/api/crypto/getcmcapi");
-            var urlUpdateWallet = new UriBuilder("https://localhost:5001/api/wallet/edit/prices/");
-
-            var client = new WebClient();
-            client.DownloadString(urlUpdateApi.ToString());
-            client.DownloadString(urlUpdateWallet.ToString());
-
-            Console.WriteLine("API refreshed at {0}", e.SignalTime);
-        }
-
-        private static void OnTimedEventEmails(Object source, ElapsedEventArgs e)
-        {
-            var urlCheckAlerts = new UriBuilder("https://localhost:5001/api/wallet/check/alerts/");
-            var client = new WebClient();
-            client.DownloadString(urlCheckAlerts.ToString());
-
-            Console.WriteLine("Email sent at {0}", e.SignalTime);
-        }
+        // private static void OnTimedEventAPI(Object source, ElapsedEventArgs e)
+        // {
+        //     var urlUpdateApi = new UriBuilder("https://localhost:5001/api/crypto/getcmcapi");
+        //     var urlUpdateWallet = new UriBuilder("https://localhost:5001/api/wallet/edit/prices/");
+        //
+        //     var client = new WebClient();
+        //     client.DownloadString(urlUpdateApi.ToString());
+        //     client.DownloadString(urlUpdateWallet.ToString());
+        //
+        //     Console.WriteLine("API refreshed at {0}", e.SignalTime);
+        // }
+        //
+        // private static void OnTimedEventEmails(Object source, ElapsedEventArgs e)
+        // {
+        //     var urlCheckAlerts = new UriBuilder("https://localhost:5001/api/wallet/check/alerts/");
+        //     var client = new WebClient();
+        //     client.DownloadString(urlCheckAlerts.ToString());
+        //
+        //     Console.WriteLine("Email sent at {0}", e.SignalTime);
+        // }
 
         public IConfiguration Configuration { get; }
 
