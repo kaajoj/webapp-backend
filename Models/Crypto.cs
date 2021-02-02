@@ -2,9 +2,8 @@
 
 namespace VSApi.Models
 {
-    public class Crypto
+    public class Crypto : BaseModel
     {
-        public int Id { get; set; }
         public int IdCrypto { get; set; }
         public int Rank { get; set; }
         public string Name { get; set; }
