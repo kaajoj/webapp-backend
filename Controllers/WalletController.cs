@@ -12,6 +12,7 @@ using VSApi.Services;
 namespace VSApi.Controllers
 {
     // [Authorize(Roles = "Administrator")]
+    // [Authorize(Policy = "RequireAdministratorRole")]
     [Authorize]
     [ApiController]
     [Route("api/[controller]")]

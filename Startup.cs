@@ -111,6 +111,11 @@ namespace VSApi
 
             services.AddControllers();
             services.AddRazorPages();
+
+            // services.AddAuthorization(options =>
+            // {
+            //     options.AddPolicy("RequireAdministratorRole", policy => policy.RequireRole("Administrator"));
+            // });
             // services.AddTransient<DataSeed>();
         }
 
