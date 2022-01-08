@@ -29,13 +29,13 @@ namespace VSApi.Services
         {
             if (Convert.ToDouble(crypto.Change) < -Convert.ToDouble(crypto.AlertDown))
             {
-                var buyStr = "Price is below your alert(-" + crypto.AlertDown + "%)  -  buy  " + crypto.Name + "(" + crypto.Symbol + ")" + "";
+                var buyStr = $"Price is below your alert (-{crypto.AlertDown}%)  -  buy  {crypto.Name} ({crypto.Symbol})";
                 var message = _emailEmailService.PrepareMessage(buyStr, crypto.Price, crypto.OldPrice, crypto.Change);
                 await _emailEmailService.SendMessage(message);
             }
             if (Convert.ToDouble(crypto.Change) > Convert.ToDouble(crypto.AlertUp))
             {
-                var sellStr = "Price is above your alert(" + crypto.AlertUp + "%)  -  sell  " + crypto.Name + "(" + crypto.Symbol + ")" + "";
+                var sellStr = $"Price is above your alert ({crypto.AlertUp}%)  -  sell  {crypto.Name} ({crypto.Symbol})";
                 var message = _emailEmailService.PrepareMessage(sellStr, crypto.Price, crypto.OldPrice, crypto.Change);
                 await _emailEmailService.SendMessage(message);
             }
