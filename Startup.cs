@@ -106,11 +106,11 @@ namespace VSApi
             services.AddIdentityServer()
                 .AddApiAuthorization<ApplicationUser, ApiContext>();
 
-            services.AddAuthentication()
-                .AddIdentityServerJwt();
-
             services.AddControllers();
             services.AddRazorPages();
+
+            services.AddAuthentication()
+                .AddIdentityServerJwt();
 
             // services.AddAuthorization(options =>
             // {
