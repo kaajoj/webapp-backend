@@ -2,9 +2,8 @@ using Org.BouncyCastle.Utilities.IO.Pem;
 
 namespace VSApi.Models
 {
-    public class Wallet
+    public class Wallet : BaseModel
     {
-        public int Id { get; set; }
         public int IdCrypto { get; set; }
         public int Rank { get; set; }
         public string Name { get; set; }
@@ -20,6 +19,7 @@ namespace VSApi.Models
         public string Change { get; set; }
 
         public string UserId { get; set; }
+        public int CryptoId { get; set; }
         public ApplicationUser User { get; set; }
         public Crypto Crypto { get; set; }
     }

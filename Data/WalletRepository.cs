@@ -16,7 +16,7 @@ namespace VSApi.Data
 
         public Wallet GetWalletByRank(int? rank)
         {
-            return ApiContext.Wallet.FirstOrDefault(c => c.Rank == rank);
+            return ApiContext.Wallets.FirstOrDefault(c => c.Rank == rank);
         }
     }
 }
